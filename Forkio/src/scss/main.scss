@@ -1,0 +1,17 @@
+@import "./helpers/base";
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 16px;
+}
+
+.container {
+	max-width: 1200px; //1189px section-width
+	margin: 0 auto;
+	padding-inline: 10px;
+}
+
+@import "./sections/global";

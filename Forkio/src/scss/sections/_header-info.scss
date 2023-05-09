@@ -1,0 +1,119 @@
+
+.hero {
+    padding-top: 82px;
+    padding-bottom: 500px;
+    @include flex;
+    flex-direction: column;
+}
+
+.hero {
+    &__tittle {
+        color: #fff;
+        font-weight: 700;
+        font-size: 82px;
+        line-height: 1;
+        margin-bottom: 20px;
+    }
+
+    &__text {
+        font-family: 'Lato';
+        font-style: normal;
+        color: #8D81AC;
+        font-weight: 400;
+        font-size: 30px;
+        line-height: 1;
+        margin-bottom: 20px;
+    }
+
+    &__text-version {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 1;
+        color: #848E97;
+    }
+}
+
+.wrapper-button {
+    @include flex;
+
+}
+
+.button {
+    transform: translateY(-50%);
+    font-family: 'Montserrat';
+    background-color: #8D81AC;
+    color: #fff;
+    border: none;
+    border-radius: 40px;
+    padding: 24px 62px;
+    font-weight: 700;
+    font-size: 21px;
+    line-height: 1.2;
+    border: 2px solid #8D81AC;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.button {
+    &__text-period {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 1.14;
+        color: #848E97;
+
+    }
+}
+
+.button:hover {
+    background-color: #fff;
+    color: #8D81AC;
+
+}
+.wrapper-text{
+    @include flex;
+    margin-bottom: 66px;
+}
+
+@include for-size(tablet) {
+    .wrapper-hero {
+        background-position: center;
+    }
+
+    .hero {
+        &__tittle {
+            font-size: 72px;
+        }
+
+        &__text {
+            font-size: 24px;
+        }
+
+        &__text-version {
+            font-size: 14px;
+        }
+    }
+}
+
+@include for-size(phone) {
+    .hero {
+        &__tittle {
+            font-size: 48px;
+        }
+
+        &__text {
+            text-align: center;
+            font-family: 'Montserrat';
+            font-size: 18px;
+            text-transform: capitalize;
+            padding: 0 10px;
+        }
+    }
+
+    .button {
+        font-size: 18px;
+        line-height: 1.1;
+        padding: 12px 28px;
+    }
+}

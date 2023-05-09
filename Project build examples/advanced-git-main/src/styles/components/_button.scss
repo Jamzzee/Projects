@@ -1,0 +1,33 @@
+@import "../mixins/reset_button";
+@import "../variables/fonts";
+@import "../variables/colors";
+
+.btn {
+	@include ResetButton;
+
+	padding: 20px 30px;
+	background-color: $secondary_color_text;
+	position: relative;
+	border-radius: 50px;
+	font-family: $font_family;
+	font-weight: 700;
+	font-size: 14px;
+	line-height: 1;
+	letter-spacing: 1.96px;
+	text-transform: uppercase;
+	color: #FFFFFF;
+
+	&:hover,
+	&:focus {
+		background-color: rgba($secondary_color_text, 0.8);
+	}
+
+	&.btn--white {
+		background-color: #fff;
+		color: $secondary_color_text;
+	}
+
+	&._m {
+		padding: 12px 24px;
+	}
+}

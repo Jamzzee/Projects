@@ -1,0 +1,87 @@
+.people-talking-bg{
+    background-image: url(../img/people_talking/testmonialsBg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.people-talking{
+    @include flex;
+    flex-direction: column;
+    &__tittle{
+        text-align: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 3em;
+        line-height:1.2;
+        margin-top: 108px;
+        margin-bottom: 82px;
+        @include for-size(tablet){
+            font-size: 2.625em;
+        }
+        @include for-size(phone){
+            font-size: 2.25em;
+        }
+    }
+    &__conteiner-wrapper{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        max-width: 1200px;
+        @include for-size(tablet) {
+            justify-content: space-around;
+        }
+    }
+    &__item{
+        margin: 0 20px 112px ;
+        max-width: 315px;
+        @include flex;
+        flex-direction: column;
+        text-align: center;
+
+        color: #fff;
+        font-family: 'Lato';
+        font-style: italic;
+        font-weight: 700;
+        font-size: 1em;
+        line-height:1.5;
+    }
+    &__text{
+        margin-top: 30px;
+    }
+    &__conteiner-footer{
+        @include flex;
+        flex-direction: column;
+        margin: 0 auto;
+    }
+    &__footer-text{
+        display: flex;
+        flex-direction: column;
+        color: #A291A5;
+        font-weight: 400;
+        font-size: 0.875em;
+        line-height:1.5;
+        text-align: center;
+        margin-bottom: 18px;
+        max-width: 887px;
+        @include for-size(tablet) {
+            max-width: 704px;
+        }
+        @include for-size(phone){
+            max-width: 250px;
+        }
+    }
+    
+    &__dacoretion-line{
+        min-width: 780px;
+        border-bottom: 2px solid #A291A5;
+        margin-bottom: 28px;
+        @include for-size(tablet){
+            min-width: 554px;
+        }
+        @include for-size(phone){
+            min-width: 245px;
+        }
+    }
+}

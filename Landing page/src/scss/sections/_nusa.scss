@@ -1,0 +1,29 @@
+.section-cols {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 14rem;
+}
+
+.section-col {
+	&:first-child {
+		width: 42%;
+	}
+
+	&:last-child {
+		width: 44%;
+	}
+
+	.section-col__image img {
+		width: 100%;
+	}
+}
+
+.arrow-link {
+	display: flex;
+	align-items: center;
+
+	.arrow-link__icon {
+		margin: 0.2rem 0 0 0.4rem;
+	}
+}

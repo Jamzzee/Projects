@@ -1,0 +1,314 @@
+.editor__header {
+	max-width: 861px;
+	background-color: $bg-white;
+	padding-bottom: 70px;
+
+	@include for-size(tablet) {
+		margin-bottom: 98px;
+	}
+
+	@include for-size(phone) {
+		margin-bottom: 78px;
+	}
+
+	.editor__title {
+		font-family: $main-font;
+		font-weight: 700;
+		color: #635C73;
+		font-size: 3.3em;
+		text-transform: uppercase;
+		text-align: center;
+		margin-bottom: 35px;
+
+		@include for-size(tablet) {
+			font-size: 2.6em;
+			margin-bottom: 32px;
+		}
+
+		@include for-size(phone) {
+			font-size: 1.6em;
+			line-height: 1.2em;
+			margin-bottom: 26px;
+		}
+	}
+
+	.editor__subtitle {
+		font-family: $secondary-font;
+		font-weight: 400;
+		color: $sub-title;
+		font-size: 1.3em;
+		line-height: 1.5em;
+		text-align: center;
+		margin-bottom: 13px;
+
+		@include for-size(tablet) {
+			margin-bottom: 18px;
+		}
+
+		@include for-size(phone) {
+			text-align: center;
+			font-size: 0.8em;
+			line-height: 1.1em;
+			padding-inline: 22px;
+			margin-bottom: 36px;
+		}
+	}
+
+	.editor__stats {
+		@include flex;
+
+		@include for-size(phone) {
+			flex-wrap: wrap;
+		}
+	}
+
+	.editor__block {
+		@include flex;
+		margin-right: 10px;
+		border: 1px solid #d5d5d5;
+		border-radius: 10%;
+
+		.whatch-editor__wrap,
+		.star-editor__wrap,
+		.fork-editor__wrap {
+			@include flex;
+			border-right: 1px solid #cacaca;
+			padding: 5px;
+			background: linear-gradient(0deg, rgba(221, 222, 222, 0.8046568969384629) 0%, rgba(238, 238, 239, 0.49933476808692223) 46%, rgba(255, 255, 255, 1) 100%);
+		}
+
+		.whatch-editor__text,
+		.star-editor__text,
+		.fork-editor__text {
+			font-family: $main-font;
+			font-weight: 700;
+			font-size: 1em;
+			color: #6a6a6a;
+			text-transform: capitalize;
+			padding-left: 5px;
+		}
+
+		.whatch-editor__count,
+		.star-editor__count,
+		.fork-editor__count {
+			font-family: $main-font;
+			font-weight: 700;
+			font-size: 1em;
+			color: #6a6a6a;
+			padding: 5px;
+		}
+	}
+
+	.editor__block:last-child {
+		@include for-size(phone) {
+			margin-top: 20px;
+		}
+	}
+}
+
+.editor__bg-color {
+	background-color: $bg-grey;
+}
+
+.editor__body {
+	padding-top: 98px;
+	padding-bottom: 33px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-areas:
+		"editor__info editor__title"
+		"editor__info editor__picture";
+
+	.editor__info {
+		grid-area: editor__info;
+	}
+
+	.editor__title {
+		grid-area: editor__title;
+	}
+
+	.editor__picture {
+		grid-area: editor__picture;
+	}
+
+	@include for-size(tablet) {
+		padding-top: 60px;
+		padding-bottom: 0;
+		justify-items: center;
+		align-items: center;
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"editor__title"
+			"editor__info"
+			"editor__picture";
+
+		.editor__info {
+			grid-area: editor__info;
+			justify-self: start;
+		}
+
+		.editor__title {
+			grid-area: editor__title;
+		}
+
+		.editor__picture {
+			grid-area: editor__picture;
+			justify-self: end;
+		}
+	}
+
+	@include for-size(phone) {
+		padding-top: 32px;
+		padding-bottom: 6px;
+		align-items: center;
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"editor__title"
+			"editor__info"
+			"editor__picture";
+
+		.editor__info {
+			grid-area: editor__info;
+			justify-self: start;
+		}
+
+		.editor__title {
+			grid-area: editor__title;
+		}
+
+		.editor__picture {
+			grid-area: editor__picture;
+			justify-self: end;
+		}
+	}
+
+
+	.editor__info {
+		padding-left: 92px;
+		margin-right: 50px;
+
+		@include for-size(tablet) {
+			padding-left: 10px;
+		}
+
+		@include for-size(phone) {
+			margin-right: 0;
+			padding-inline: 26px
+		}
+
+		.editor__block {
+			@include flex(center, flex-start);
+			margin-bottom: 33px;
+
+			@include for-size(tablet) {
+				margin-bottom: 60px;
+			}
+
+			@include for-size(phone) {
+				@include flex(center, center);
+				flex-direction: column;
+			}
+
+			.item-editor__image {
+				@include flex;
+				width: 100%;
+
+				@include for-size(tablet) {
+					justify-content: center;
+					width: 50%;
+				}
+
+				@include for-size(phone) {
+					margin-bottom: 27px;
+				}
+			}
+
+
+			.item-editor__wrap {
+
+				.item-editor__subtitle {
+					font-family: $main-font;
+					font-weight: 400;
+					color: $sub-title;
+					font-size: 1em;
+					line-height: 1.3em;
+					margin-bottom: 16px;
+
+					@include for-size(tablet) {
+						margin-bottom: 0;
+						line-height: 1.2em;
+					}
+
+					@include for-size(phone) {
+						text-align: center;
+						font-size: 1em;
+						margin-bottom: 14px;
+					}
+				}
+
+				.item-editor__text {
+					font-family: $main-font;
+					font-weight: 400;
+					color: $sub-text;
+					font-size: 0.9em;
+					line-height: 1.4em;
+
+
+					@include for-size(phone) {
+						text-align: center;
+						margin-bottom: 0;
+					}
+				}
+			}
+		}
+
+
+		.editor__block:not(:nth-child(1)) {
+			.item-editor__wrap {
+				padding-left: 10px;
+
+				@include for-size(phone) {
+					padding-left: 0;
+				}
+			}
+		}
+
+		.editor__block:first-child {
+			.item-editor__image {
+				padding-left: 10px;
+			}
+		}
+
+	}
+
+	.editor__title {
+		font-family: $main-font;
+		font-weight: 700;
+		color: $secondary-purple;
+		font-size: 3em;
+		margin-bottom: 18px;
+
+		@include for-size(tablet) {
+			text-align: center;
+			font-size: 2.6em;
+			margin-bottom: 52px;
+		}
+
+		@include for-size(phone) {
+			text-align: center;
+			font-size: 2em;
+			line-height: 1.3em;
+			margin-inline: 44px;
+			margin-bottom: 36px;
+		}
+	}
+
+	.editor__picture img {
+		width: 100%;
+		min-height: 519px;
+
+		@include for-size(phone) {
+			margin-top: 26px;
+		}
+	}
+}

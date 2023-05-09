@@ -1,0 +1,23 @@
+// For media queries
+
+@mixin for-size($size) {
+	@if $size==phone {
+		@media (min-width: 320px) and (max-width: 480px) {
+			@content;
+		}
+	}
+
+	@else if $size==tablet {
+		@media (min-width: 481px) and (max-width: 992px) {
+			@content;
+		}
+	}
+}
+
+//For flex
+
+@mixin flex($horizontal: center, $vertical: center) {
+	display: flex;
+	justify-content: $horizontal;
+	align-items: $vertical;
+}

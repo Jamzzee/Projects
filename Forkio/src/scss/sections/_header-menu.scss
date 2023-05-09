@@ -1,0 +1,198 @@
+body {
+    font-family: 'Montserrat';
+}
+
+.wrapper-header {
+    background-image: url(../img/header/heroBg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.header {
+    @include flex;
+    padding: 30px 90px;
+    background-color: black;
+}
+
+.header {
+    &__logo {
+        @include flex;
+        text-decoration: none;
+        color: #8D81AC;
+    }
+
+    &__logo-img {
+        width: 41px;
+        height: 40px;
+        background-image: url(../img/header/logo.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    &__logo:hover {
+        color: #fff;
+    }
+
+    &__logo:hover &__logo-img {
+        background-image: url(../img/header/logoHover.png)
+    }
+
+    &__list-menu {
+        @include flex;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 1;
+        color: #8D81AC;
+        margin-left: auto;
+    }
+
+    &__list-item {
+        margin-right: 48px;
+        cursor: pointer;
+    }
+
+    &__list-item:hover {
+        color: #fff;
+    }
+
+    &__logo-text {
+        font-family: 'Lato';
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 1;
+        margin-left: 18px;
+    }
+
+    &__button {
+        font-family: 'Montserrat';
+        padding: 10px 20px;
+        background-color: #8D81AC;
+        color: #fff;
+        border-radius: 40px;
+        border: 2px solid #8D81AC;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    &__button:hover {
+        background-color: #fff;
+        color: #8D81AC;
+    }
+
+    &__modal-btn {
+        display: none;
+        width: 22px;
+        height: 22px;
+        background-color: transparent;
+        border: none;
+    }
+
+    &__drop-menu {
+        display: block;
+        font-family: 'Montserrat';
+        background: #333333;
+        position: absolute;
+        top: 100px;
+        height: 330px;
+        width: 292px;
+        font-weight: 400;
+        font-size: 26px;
+        line-height: 1;
+
+        @media (min-width: 321px) {
+            right: 14px;
+        }
+    }
+
+    &__drop-list {
+        color: #fff;
+    }
+
+    &__drop-item {
+        padding-left: 38px;
+        padding-top: 28px;
+        padding-bottom: 22px;
+        border-bottom: 3px solid #3B3B3B;
+        position: relative;
+    }
+
+    &__drop-item:hover {
+        color: #8D81AC;
+    }
+
+    &__drop-item:hover::before {
+        content: "|";
+        width: 8px;
+        height: 53px;
+        background-color: #8D81AC;
+        position: absolute;
+        left: 0%;
+        bottom: 12px;
+    }
+}
+
+
+@include for-size(tablet) {
+    .wrapper-header {
+        background-position: center;
+    }
+
+    .header {
+        position: relative;
+        padding: 22px 20px 56px 20px;
+        background: #27262A;
+
+    }
+
+    .header {
+        &__list-menu {
+            position: absolute;
+            bottom: 18%;
+        }
+
+        &__button {
+            margin-left: auto;
+        }
+
+        &__list-item:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+@include for-size(phone) {
+    .wrapper-header {
+        background-position: center;
+    }
+
+    .header {
+        background: #27262A;
+        padding: 30px 16px 30px 14px;
+        position: relative;
+    }
+
+    .header {
+        &__logo-text {
+            display: none;
+        }
+
+        &__button {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        &__list-menu {
+            display: none;
+        }
+
+        &__modal-btn {
+            display: block;
+        }
+    }
+}
+
+.is-hidden {
+    display: none;
+}

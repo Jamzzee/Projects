@@ -1,0 +1,255 @@
+.pricing-bg {
+	background-image: url(../img/pricing/pricing_bg.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.pricing__header {
+	text-align: center;
+	padding-top: 83px;
+	padding-bottom: 112px;
+
+	@include for-size(tablet) {
+		padding-top: 90px;
+		padding-bottom: 39px;
+	}
+
+	@include for-size(phone) {
+		padding-block: 2px 32px;
+	}
+
+	.pricing__title {
+		font-family: $main-font;
+		font-weight: 700;
+		font-size: 3em;
+		color: $title-white;
+		text-transform: capitalize;
+
+		@include for-size(tablet) {
+			font-size: 2.6em;
+		}
+
+		@include for-size(phone) {
+			font-size: 1.7em;
+			line-height: 1.6em;
+		}
+	}
+}
+
+//Block with 4 other's blocks
+
+.pricing__block {
+	@include flex(center, normal);
+	padding-bottom: 97px;
+
+	@include for-size(tablet) {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-column-gap: 25px;
+		grid-row-gap: 71px;
+		justify-content: center;
+		justify-items: end;
+		padding-inline: 79px 109px;
+		padding-bottom: 94px;
+	}
+
+	@include for-size(phone) {
+		display: grid;
+		grid-template-columns: 1fr;
+		justify-content: center;
+		justify-items: center;
+		grid-row-gap: 18px;
+		padding-inline: 31px 32px;
+		padding-bottom: 15px;
+	}
+
+	.pricing__wrap:not(:last-child) {
+		margin-right: 15px;
+
+		@include for-size(tablet) {
+			margin-right: 0;
+		}
+
+		@include for-size(phone) {
+			margin-right: 0;
+		}
+	}
+
+	//Correct block agency
+	.pricing__wrap:nth-child(3) {
+		max-height: 560px;
+		margin-top: -50px;
+
+		@include for-size(phone) {
+			max-height: 600px;
+			margin-top: 0;
+		}
+	}
+
+	.pricing__wrap:not(:nth-child(3)) {
+
+		@include for-size(tablet) {
+			max-height: 460px;
+			max-width: 258px;
+		}
+	}
+
+	//finished correct
+
+	.pricing__wrap:nth-child(2) {
+		.wrap__header {
+			padding-inline: 30px;
+		}
+	}
+
+	.pricing__wrap:nth-child(4) {
+
+		.wrap__header {
+			padding-inline: 49px;
+		}
+	}
+
+	.pricing__wrap:nth-child(1) {
+		.wrap__subtext {
+			margin-bottom: 69px;
+		}
+	}
+
+	.pricing__wrap:nth-child(4) {
+		.wrap__subtext {
+			padding-inline: 5px;
+		}
+	}
+
+	.pricing__wrap:nth-child(2),
+	.pricing__wrap:nth-child(4) {
+		.wrap__subtext {
+			margin-bottom: 50px;
+		}
+	}
+}
+
+//Styles for each block
+
+.pricing__wrap {
+	text-align: center;
+	background-color: rgba(106, 88, 106, 0.6);
+
+	.wrap__header {
+		background-color: rgba(255, 255, 255, 0.06);
+		padding: 36px 63px;
+
+		.wrap__title {
+			text-align: center;
+			font-family: $main-font;
+			font-weight: 400;
+			font-size: 1.5em;
+			color: #FFFFFF;
+			text-transform: uppercase;
+		}
+	}
+
+	.wrap__body {
+		.wrap__price {
+			font-family: $main-font;
+			font-weight: 400;
+			font-size: 3.7em;
+			line-height: 1.8em;
+			color: #FFFFFF;
+			text-transform: uppercase;
+
+			@include for-size(phone) {
+				font-size: 3.7em;
+				line-height: 2em;
+			}
+		}
+
+		.wrap__text {
+			font-family: $main-font;
+			font-weight: 400;
+			font-size: 0.8em;
+			line-height: 1em;
+			color: #FFFFFF;
+			text-transform: uppercase;
+			margin-bottom: 73px;
+			position: relative;
+		}
+
+		.wrap__text::after {
+			content: "";
+			position: absolute;
+			width: 60px;
+			height: 5px;
+			top: 40px;
+			left: 50%;
+			transform: translateX(-50%);
+			background-color: #8D81AC;
+			border: none;
+		}
+
+		.wrap__subtext {
+			font-family: $main-font;
+			font-weight: 400;
+			font-size: 1em;
+			line-height: 1.1em;
+			color: #FFFFFF;
+			text-transform: uppercase;
+		}
+
+		.wrap__btn {
+			display: inline-block;
+			outline: none;
+			padding: 16px 38px;
+			margin-bottom: 39px;
+			background: rgba(255, 255, 255, 0.15);
+			border: none;
+			border-radius: 20px;
+			mix-blend-mode: normal;
+			font-family: $main-font;
+			font-weight: 400;
+			font-size: 0.9em;
+			color: #FFFFFF;
+			text-transform: uppercase;
+		}
+	}
+
+	//Correct block agency
+
+	.wrap__header-agency {
+		background-color: rgba(60, 41, 63, 0.84);
+		padding-block: 43px;
+		min-width: 300px;
+	}
+
+	.wrap__body-agency {
+		background-color: #463048;
+		padding-bottom: 25px;
+
+		.wrap__price-agency {
+			font-size: 5.1em;
+			line-height: 1.6em;
+			margin-bottom: 16px;
+
+			@include for-size(phone) {
+				line-height: 1.5em;
+			}
+		}
+
+		.wrap__text-agency {
+			margin-bottom: 91px;
+		}
+
+		.wrap__subtext-agency {
+			margin-bottom: 83px;
+		}
+
+		.wrap__btn-agency {
+			margin-bottom: 47px;
+
+			@include for-size(tablet) {
+				margin-bottom: 39px;
+			}
+		}
+	}
+}

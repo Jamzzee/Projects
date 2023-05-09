@@ -1,7 +1,0 @@
-/node_modules/**/*
-.idea
-.vscode
-.DS_Strore
-*.imL
-*.xmL
-package-lock.json

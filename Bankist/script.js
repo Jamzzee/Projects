@@ -325,7 +325,7 @@ const countDownTimer = function () {
   return timer;
 };
 
-// Fake account
-currentUser = account1;
-displayUI(currentUser);
-containerApp.style.opacity = 1;
+// Fake account for testing operation
+// currentUser = account1;
+// displayUI(currentUser);
+// containerApp.style.opacity = 1;

@@ -1,12 +1,6 @@
 'use strict';
 
-// TODO
-// dateTimeFormat
-// numberFormat
-// countDown timer for login
-// reset timer
-
-// Data
+// Work Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
@@ -307,7 +301,7 @@ btnClose.addEventListener('click', e => {
 
 //TODO Countdown time for current UI
 const countDownTimer = function () {
-  let time = 120;
+  let time = 300;
   const tick = function () {
     let minute = String(Math.floor(time / 60)).padStart(2, 0);
     let second = String(time % 60).padStart(2, 0);

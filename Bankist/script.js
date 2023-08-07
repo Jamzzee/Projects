@@ -116,6 +116,7 @@ const formatDates = (date, locale) => {
   if (dayPassed === 0) return 'now';
   if (dayPassed === 1) return `yesterday`;
   if (dayPassed <= 7) return `${dayPassed} days ago`;
+
   return new Intl.DateTimeFormat(locale).format(date);
 };
 // TODO Currency format function
@@ -181,6 +182,7 @@ const displayAllSummery = acc => {
     .map(mov => (mov * acc.interestRate) / 100)
     .filter(mov => mov > 1)
     .reduce((acc, mov) => acc + mov);
+
   labelSumIn.textContent = currencyFormat(sumIn, acc.locale, acc.currency);
   labelSumOut.textContent = currencyFormat(sumOut, acc.locale, acc.currency);
   labelSumInterest.textContent = currencyFormat(

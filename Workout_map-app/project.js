@@ -95,10 +95,10 @@ class App {
 
     // Attached event handlers immediately when page is load
     btnView.addEventListener('click', this._showAllMartker.bind(this));
-    sortType.addEventListener('change', this._toggleSortOptions.bind(this)); // depends on type of sorts, re-create and render;
-    sortContainer.addEventListener('click', this._sortEntries.bind(this)); // sort logic;
+    sortType.addEventListener('change', this._renderSortOptions.bind(this)); // depends on type of sorts, re-create and render;
+    sortContainer.addEventListener('click', this._sortWorkouts.bind(this)); // sort logic;
     btnDeleteAll.addEventListener('click', this._removeAllEntries.bind(this)); // delete all data entries;
-    form.addEventListener('submit', this._newWorkOut.bind(this)); // create new workout depends on type;
+    form.addEventListener('submit', this._createNewWorkout.bind(this)); // create new workout depends on type;
     inputType.addEventListener('change', this._toggleElevetionField.bind(this)); // choose type of two workout options in the form field;
 
     // Attached handlers for interacting with mapty options
@@ -167,16 +167,15 @@ class App {
     this._clearInputs(); // Call method for empty all fields;
   }
 
-  // Choose running or cycling option
+  // Type toggle handler
   _toggleElevetionField() {
-    //Attached listener 'change' on inputType (where is two options of type);
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
     this._clearInputs(); //TODO is we need to clear all fields or just changeable field ?
   }
 
-  // Create new workout depends on condition: running or cycling
-  _newWorkOut(e) {
+  // Creates new workout depending on condition: running or cycling
+  _createNewWorkout(e) {
     e.preventDefault(); // work with form, so we need to prevent default behavior;
 
     // Helper function for validation
@@ -184,54 +183,47 @@ class App {
       inputs.every(inp => Number.isFinite(inp)); // Check for number value (must be a number);
     const allPositive = (...inputs) => inputs.every(inp => inp > 0); // Check for positive value, can't be negative;
 
-    //Get data from the form and converted it to a number;
-    let type = inputType.value; // String: running or cycling;
-    let distance = +inputDistance.value;
-    let duration = +inputDuration.value;
-    const { lat, lng } = this.#mapEvent.latlng; // take coordinates, after clicking on the map (in which place we are clicking on);
-    let date = Date.now(); // Store not formating date;
-    let workout; // Create variable for stores new workout;
+    // Get data from inputs
+    const type = inputType.value; // String: running or cycling;
+    const distance = +inputDistance.value;
+    const duration = +inputDuration.value;
+    const cadence = +inputCadence.value; // unique for running
+    const elevation = +inputElevation.value; // unique for cycling
 
-    // If workout is running, then create running object
-    if (type === 'running') {
-      let cadence = +inputCadence.value;
-      // TODO Check if data is valid
-      if (
-        !validInputs(distance, duration, cadence) ||
-        !allPositive(distance, duration, cadence)
-      )
-        return this._errorFormMsg(); //TODO improve functionality;
+    const { lat, lng } = this.#mapEvent.latlng; // takes coordinates, after click
+    const date = Date.now(); // Store not formating date;
 
-      // this._errorFormMsg();
-      workout = new Running([lat, lng], distance, duration, date, cadence); // Store in our variable;
+    const isRunning = type === 'running';
+
+    if (
+      (isRunning &&
+        validInputs(distance, duration, cadence) &&
+        allPositive(distance, duration, cadence)) ||
+      (!isRunning &&
+        validInputs(distance, duration, elevation) &&
+        allPositive(distance, duration))
+    ) {
+      const workout = isRunning
+        ? new Running([lat, lng], distance, duration, date, cadence)
+        : new Cycling([lat, lng], distance, duration, date, elevation);
+
+      // Add new object to the workout array
+      this.#workouts.push(workout); // Each time when we are creating new object depends on choose type, store it in array;
+
+      // Render workout on the list
+      this._renderWorkout(workout); // Display this newly workout on the map;
+
+      // Render workout and display the marker on the map for new data
+      this._renderWorkoutMarker(workout);
+
+      // Hide form and clear the fields (method call's inside hideForm)
+      this._hideForm();
+
+      // Set local storage to all workouts
+      this._setLocalStorage();
     }
-
-    // TODO if workout is cycling, then create cycling object
-    if (type === 'cycling') {
-      let elevation = +inputElevation.value;
-      if (
-        !validInputs(distance, duration, elevation) ||
-        !allPositive(distance, duration)
-      )
-        return alert('Inputs have to be positive numbers!'); //TODO improve functionality;
-
-      workout = new Cycling([lat, lng], distance, duration, date, elevation); // Store in our variable;
-    }
-
-    // Add new object to the workout array
-    this.#workouts.push(workout); // Each time when we are creating new object depends on choose type, store it in array;
-
-    // Render workout on the list
-    this._renderWorkout(workout); // Display this newly workout on the map;
-
-    // Render workout and display the marker on the map for new data
-    this._renderWorkoutMarker(workout);
-
-    // Hide form and clear the fields (method call's inside hideForm)
-    this._hideForm();
-
-    // Set local storage to all workouts
-    this._setLocalStorage();
+    // Render an error message if false
+    this._errorFormMsg();
   }
 
   // View workouts marker on the map
@@ -243,273 +235,234 @@ class App {
       iconAnchor: [24, 10],
     });
 
+    const popupOptions = {
+      maxWidth: 250,
+      minWidth: 150,
+      autoClose: false,
+      closeOnClick: false,
+      className: `${workout.type}-popup`,
+    };
+
+    // Create a marker with the custom icon and popup options
     const layer = L.marker(workout.coords, {
       icon: customOptionMarker, // apply custom icon
-    })
-      .addTo(this.#map)
-      .bindPopup(
-        L.popup({
-          maxWidth: 250,
-          minWidth: 150,
-          autoClose: false,
-          closeOnClick: false,
-          className: `${workout.type}-popup`,
-        })
-      )
-      .setPopupContent(
-        `${workout.type === 'running' ? `🏃‍♂️` : `🚴‍♀️`} ${workout.description}`
-      ) // set our description on the newly created Marker on the map;
-      .openPopup(); // EXPLAIN
+    }).addTo(this.#map);
 
-    // Each new marker pushing to global markers array. Needs for future operations and manipulation with data array;
+    // Bind a popup to the marker with the specified options
+    const popup = L.popup(popupOptions);
+    popup.setContent(
+      `${workout.type === 'running' ? `🏃‍♂️` : `🚴‍♀️`} ${workout.description}`
+    ); // set our description on the newly created Marker on the map;
+    layer.bindPopup(popup);
+
+    // Open popup for this marker
+    layer.openPopup();
+
+    // Push the new marker to the global markers array for future manipulation
     this.#markers.push(layer);
   }
 
-  // Zooms map for display all markers in one view
+  // Adjust the map's view to fit the bounds with all markers
   _showAllMartker() {
-    if (this.#workouts.length === 0) return; // defender check
+    if (this.#workouts.length === 0) return; // if no workout, return early
 
-    const latitude = this.#workouts.map(w => {
-      return w.coords[0];
-    }); // looping over global array and store latitude coords of each element;
-    const longitude = this.#workouts.map(w => {
-      return w.coords[1];
-    }); // looping over global array and store longitude of each element;
+    // Extract latitude and longitude values from the workout coordinates
+    const latitude = this.#workouts.map(w => w.coords[0]);
+    const longitude = this.#workouts.map(w => w.coords[1]);
 
-    // Find min/max of latitude and longitude. Need for creates rectangle bounds for displaying all exists markers in one view;
+    // Calculate the minimum and maximum latitude and longitude.
     const minLat = Math.min(...latitude);
     const maxLat = Math.max(...latitude);
     const minLong = Math.min(...longitude);
     const maxLong = Math.max(...longitude);
 
-    this.#map.fitBounds(
-      [
-        // Creates rectangle bounds;
-        [minLat, minLong],
-        [maxLat, maxLong],
-      ],
-      // Options
-      { padding: [120, 120], animate: true, duration: 1 }
-    );
+    // Creates a rectangle bounds that encompas all markers and define some options with animation
+    const bounds = [
+      [minLat, minLong],
+      [maxLat, maxLong],
+    ];
+    const boundsOptions = {
+      padding: [25, 25],
+      animate: true,
+      duration: 1,
+    };
+
+    // Adjust the map's view to fit the bounds and options;
+    this.#map.fitBounds(bounds, boundsOptions);
   }
 
-  // View workouts list
+  // Render workout
   _renderWorkout(workout) {
-    let html = `
-				<li class="workout workout--${workout.type}" data-id="${workout.id}">
-				<h2 class="workout__title">${workout.description}</h2>
-				<button class='workout__btn--edit'>edit</button> 
-				<button class='workout__btn--delete'>delete</button> 
-				<div class="workout__details">
-				<span class="workout__icon">${workout.type === 'running' ? `🏃‍♂️` : `🚴‍♀️`}</span>
-				<input class="workout__value" data-type="distance" value="${
-          workout.distance
-        }" disabled size="2">
-				<span class="workout__unit">km</span>
-				</div>
-				<div class="workout__details">
-				<span class="workout__icon">⏱</span>
-				<input class="workout__value" data-type="duration" value="${
-          workout.duration
-        }" disabled size="2">
-				<span class="workout__unit">min</span>
-				</div>
-		`;
+    const workoutHTML = this._generateWorkoutHTML(workout);
+    devider.insertAdjacentHTML('afterend', workoutHTML);
 
-    // depends on which type of workout chose, generate certain list;
-
-    if (workout.type === 'running') {
-      html += `	
-				<div class="workout__details">
-					<span class="workout__icon">⚡️</span>
-					<input class="workout__value" data-type="pace" value="${workout.pace.toFixed(
-            1
-          )}" disabled size="2">
-					<span class="workout__unit">min/km</span>
-				  </div>
-				<div class="workout__details">
-					<span class="workout__icon">🦶🏼</span>
-					<input class="workout__value" data-type="cadence" value="${
-            workout.cadence
-          }" disabled size="1">
-					<span class="workout__unit">spm</span>
-				</div>
-			</li>
-	`;
-    }
-
-    if (workout.type === 'cycling') {
-      html += `
-			<div class="workout__details">
-						<span class="workout__icon">⚡️</span>
-						<input class="workout__value" data-type="speed" value="${workout.speed.toFixed(
-              1
-            )}" disabled size="2">
-						<span class="workout__unit">km/h</span>
-					</div>
-					<div class="workout__details">
-						<span class="workout__icon">⛰</span>
-						<input class="workout__value" data-type="elevetionGain" value="${
-              workout.elevetionGain
-            }" disabled size="1">
-						<span class="workout__unit">m</span>
-					</div>
-				</li>
-			`;
-    }
-
-    devider.insertAdjacentHTML('afterend', html); // insert newly created list after devider element on the web page;
     this._editWorkoutsBtn(workout); // for receiving workout data, need for manipulation with this data
     this._removeHandleBtn(workout); // for receiving workout data, need for access to this workout list
   }
+  _generateWorkoutHTML(workout) {
+    const icon = workout.type === 'running' ? `🏃‍♂️` : `🚴‍♀️`;
+
+    // Create html for general properties which characteristic for available workouts type
+    // prettier-ignore
+    const distanceHTML = this._generateInputHTML('distance', workout.distance,'km', icon)
+    // prettier-ignore
+    const durationHTML = this._generateInputHTML('duration', workout.duration,'min', '⏱')
+
+    let additionalDetailsHTML = ''; // for privat additional for each type;
+
+    // Create html for unique characteristic for each type of workout
+    // prettier-ignore
+    if(workout.type === 'running') {
+      const paceHTML = this._generateInputHTML('pace', workout.pace.toFixed(1), 'min/km', '⚡️')
+      const cadenceHTML = this._generateInputHTML('cadence', workout.cadence, 'spm', '🦶🏼')
+      additionalDetailsHTML = paceHTML + cadenceHTML
+    }
+    // prettier-ignore
+    if(workout.type === 'cycling') {
+      const speedHTML = this._generateInputHTML('speed', workout.speed.toFixed(1), 'km/h', '⚡️')
+      const elevationHTML = this._generateInputHTML('elevetionGain', workout.elevetionGain, 'm', '⛰')
+      additionalDetailsHTML = speedHTML + elevationHTML
+    }
+
+    return `
+    <li class="workout workout--${workout.type}" data-id="${workout.id}">
+      <h2 class="workout__title">${workout.description}</h2>
+      <button class='workout__btn--edit'>edit</button> 
+      <button class='workout__btn--delete'>delete</button>
+      ${distanceHTML}
+      ${durationHTML}
+      ${additionalDetailsHTML}
+    </li>
+    `;
+  }
+  _generateInputHTML(dataType, value, unit, additionalIcon = '') {
+    return `
+    <div class="workout__details">
+      <span class="workout__icon">${additionalIcon}</span>
+      <input class="workout__value" data-type="${dataType}" value="${value}" disabled size="2">
+      <span class="workout__unit">${unit}</span>
+    </div>
+    `;
+  }
 
   // Sort options list
-  _toggleSortOptions(e) {
-    const typeValue = sortType.value;
-    let htmlOptions = ``;
+  _renderSortOptions(e) {
+    const typeValue = sortType.value; // 'running' || 'cycling'
+    // Display or hide sorting options depends on type value
+    const isSorted = typeValue !== 'all' ? false : true;
+    sortContainer.classList.toggle('sort__container--view', isSorted);
 
-    // Depends on choose sort type, displayed certain options
-    typeValue !== 'all'
-      ? sortContainer.classList.remove('sort__container--view') // if chose 'sort' - then hide sort options;
-      : sortContainer.classList.add('sort__container--view'); // if chose any other value instead of 'sort' - display sort options, depending on sort type;
+    // Define an 'Options' object with two properties
+    const options = {
+      running: [
+        { type: 'date', icon: '📅' },
+        { type: 'distance', icon: '🏃‍♂️' },
+        { type: 'duration', icon: '⏱' },
+        { type: 'pace', icon: '⚡️' },
+        { type: 'cadence', icon: '🦶🏼' },
+      ],
+      cycling: [
+        { type: 'date', icon: '📅' },
+        { type: 'distance', icon: '🚴‍♀️' },
+        { type: 'duration', icon: '⏱' },
+        { type: 'speed', icon: '⚡️' },
+        { type: 'elevetionGain', icon: '⛰' },
+      ],
+    };
 
-    // Displaying sort option depend on chose type: running or cycling;
-    if (typeValue === 'running') {
-      htmlOptions = `
-      <button class="sort__btn" data-type="date">
-      <span class="sort__icon">&#128198</span>
-      <span class="sort__arrow" data-type="date">&#129047;</span>
-      </button>
-      <button class="sort__btn" data-type="distance">
-      <span class="sort__icon">🏃‍♂️</span>
-      <span class="sort__arrow" data-type="distance">&#129047;</span>
-    </button>
-    <button class="sort__btn" data-type="duration">
-    <span class="sort__icon">⏱</span>
-    <span class="sort__arrow" data-type="duration">&#129047;</span>
-    </button>
-    <button class="sort__btn" data-type="pace">
-      <span class="sort__icon">⚡️</span>
-      <span class="sort__arrow" data-type="pace">&#129047;</span>
-      </button>
-    <button class="sort__btn" data-type="cadence">
-    <span class="sort__icon">🦶🏼</span>
-    <span class="sort__arrow" data-type="cadence">&#129047;</span>
-    </button>
-    `;
-    }
-    if (typeValue === 'cycling') {
-      htmlOptions = `
-      <button class="sort__btn" data-type="date">
-      <span class="sort__icon">&#128198</span>
-      <span class="sort__arrow" data-type="date">&#129047;</span>
-    </button>
-    <button class="sort__btn" data-type="distance">
-    <span class="sort__icon">🏃‍♂️</span>
-    <span class="sort__arrow" data-type="distance">&#129047;</span>
-    </button>
-    <button class="sort__btn" data-type="duration">
-      <span class="sort__icon">⏱</span>
-      <span class="sort__arrow" data-type="duration">&#129047;</span>
-      </button>
-      <button class="sort__btn" data-type="speed">
-      <span class="sort__icon">⚡️</span>
-      <span class="sort__arrow" data-type="speed">&#129047;</span>
-      </button>
-      <button class="sort__btn" data-type="elevetionGain">
-      <span class="sort__icon">⛰</span>
-      <span class="sort__arrow" data-type="elevetionGain">&#129047;</span>
+    // Creates a string depends on which type (properties) chose for sorting
+    const htmlOptions = (options[typeValue] || [])
+      .map(option => {
+        return `
+      <button class="sort__btn" data-type="${option.type}">
+        <span class="sort__icon">${option.icon}</span>
+        <span class="sort__arrow" data-type="${option.type}">&#129047;</span>
       </button>
       `;
-    }
-    sortContainer.innerHTML = ''; // if we change type of sort, we need to clear our sortContainer for re-write new options;
-    sortContainer.insertAdjacentHTML('afterbegin', htmlOptions); // insert correct string at the beginning of the sortContainer;
+      })
+      .join('');
 
-    this._renderSortType(typeValue); // get access for chose type value, for manipulating data;
+    sortContainer.innerHTML = ''; // Clear container before inserting
+    sortContainer.insertAdjacentHTML('afterbegin', htmlOptions);
+
+    this._renderWorkoutsByType(typeValue); // get access for chose type value, for manipulating data;
     return [typeValue]; // return chosen type of value for future operation;
   }
 
-  // Sort workot data;
-  _sortEntries(e) {
-    const element = e.target.closest('.sort__btn'); // current press sorting btn;
-    if (!element) return; // if there isn't any elment of sorting - stop execution;
-    const [typeValue] = this._toggleSortOptions(); // get chosen type of value;
-    let direction; // for observes sor direction: ascending or descending;
+  // Sort workouts data;
+  _sortWorkouts(e) {
+    const sortingBtn = e.target.closest('.sort__btn'); // current press sorting btn;
+    if (!sortingBtn) return; // if there isn't any elment of sorting - stop execution;
+    const [selectedSortType] = this._renderSortOptions(); // get chosen type of value;
 
-    const typeEl = element.dataset.type; // get type of accessible sort option
-    const sortArrow = element.querySelector('.sort__arrow');
+    const sortType = sortingBtn.dataset.type; // get type of accessible sort option
     const sortArrows = sortContainer.querySelectorAll('.sort__arrow');
 
-    !this.#sort ? (direction = 'ascending') : (direction = 'descending'); // store certain value for direction - depending on current sort value (boolean);
-
+    const sortOrder = this.#sort ? 'descending' : 'ascending';
     this.#sort = !this.#sort; // switch boolean value, each time when we clicked on sort btn - needs for observes sort status;
 
-    const sortedArr = this._sortArray(this.#workouts, direction, typeEl); // Store sorted array in the variable, shallow copy;
+    const sortedWorkouts = this._sortArray(this.#workouts, sortOrder, sortType); // Store sorted array in the variable, shallow copy;
 
     // Clear all workouts and markers. Not from the global array;
+    this._clearWorkoutsAndMarkers();
+
+    sortedWorkouts.forEach(work => {
+      // Render type: all types of workout || certain type: 'running' | 'cycling'
+      if (work.type === selectedSortType) this._helperRenderMethod(work);
+      if (selectedSortType === 'all') this._helperRenderMethod(work);
+    });
+    this._toggleArrow(this.#sort, sortArrows, sortType); // depends on sort, change arrow direction for flagging sort direction;
+  }
+
+  //  Render workouts by type on the map
+  _renderWorkoutsByType(type) {
+    if (!type) return;
+
+    // Clear previous workouts and markers
+    this._clearWorkoutsAndMarkers();
+
+    // Render workouts based on the selected type
+    this.#workouts.forEach(work => {
+      if (work.type === type) this._helperRenderMethod(work);
+      if (type === 'all') this._helperRenderMethod(work);
+    });
+
+    // Focus on the last workout on the list
+    const lastWorkout = this.#workouts[this.#workouts.length - 1];
+    this._setIntoView(lastWorkout);
+  }
+
+  // helper clear workouts and markers method
+  _clearWorkoutsAndMarkers() {
     containerWorkouts.querySelectorAll('.workout').forEach(workout => {
       workout.remove();
     });
     this.#markers.forEach(mark => mark.remove());
     this.#markers = [];
-
-    sortedArr.forEach(work => {
-      // check for type value. We need to sort only a certain type;
-      if (work.type === typeValue) {
-        this._helperRenderMethod(work); // Render current data depends on sort type and direction;
-      }
-      if (typeValue === 'all') {
-        this._helperRenderMethod(work); // Render all accessible data (take from global array), sort default on date type;
-      }
-    });
-    this._toggleArrow(this.#sort, sortArrow, sortArrows, typeEl); // depends on sort, change arrow direction for flagging sort direction;
   }
 
   // Arrow direction depends on sort direction;
-  _toggleArrow(sort, arr, arrws, type) {
-    if (sort) {
-      arrws.forEach(arr => {
-        if (arr.dataset.type === type) arr.innerHTML = `&#129045`;
-      });
-    } else arr.innerHTML = `&#129047;`;
-  }
-
-  // Sort logic
-  _sortArray(array, direction, type) {
-    // Depends from direction executes ascending or descending sorted;
-    if (direction === 'ascending')
-      return array.toSorted((a, b) => a[type] - b[type]);
-    if (direction === 'descending')
-      return array.toSorted((a, b) => b[type] - a[type]);
-  }
-
-  // Rendering certain sort type
-  _renderSortType(type) {
-    if (!type) return;
-    const workoutType = type; // get chose type of sort: running or cycling;
-
-    // Before rendering actual data, need to clear previous data. Include workout list and displayed markers
-    containerWorkouts.querySelectorAll('.workout').forEach(workout => {
-      workout.remove();
+  _toggleArrow(sort, arrows, type) {
+    const arrowIcon = sort ? '&#129045' : '&#129047';
+    arrows.forEach(arr => {
+      if (arr.dataset.type === type) arr.innerHTML = arrowIcon;
     });
-    this.#markers.forEach(mark => mark.remove());
-    this.#markers = [];
-
-    // After clear previous data, render all again depends on type which are chosen;
-    if (workoutType) {
-      this.#workouts.forEach(work => {
-        if (work.type === workoutType) {
-          this._helperRenderMethod(work);
-        }
-        if (workoutType === 'all') {
-          this._helperRenderMethod(work);
-        }
-      });
-    }
-    const focusWorkout = this.#workouts[this.#workouts.length - 1]; // store the last element in the global workout array;
-    this._setIntoView(focusWorkout); // take focus on the map on last workout element which store in the array list;
   }
 
+  // Helper sort array method
+  _sortArray(array, direction, type) {
+    // Create a sorting function based on direction and type
+    const sortFunction = (a, b) => {
+      const aValue = a[type];
+      const bValue = b[type];
+
+      return direction === 'ascending' ? aValue - bValue : bValue - aValue;
+    };
+    // use toSorted function to sort the array and create shallow copy
+    return array.toSorted(sortFunction);
+  }
+
+  // TODO continue cleaning and refactoring code
   // Attached view on the workouts, include list and marker
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout'); // store workout data which was clicked;

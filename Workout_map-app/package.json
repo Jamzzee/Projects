@@ -2,7 +2,7 @@
   "name": "projects",
   "version": "1.0.0",
   "description": "Workout application with map supporting",
-  "default": "app.js",
+  "default": "index.js",
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html --no-scope-hoist --dist-dir ./dist"

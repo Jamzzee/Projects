@@ -97,7 +97,7 @@ class App {
     btnView.addEventListener('click', this._showAllMartker.bind(this));
     sortType.addEventListener('change', this._renderSortOptions.bind(this)); // depends on type of sorts, re-create and render;
     sortContainer.addEventListener('click', this._sortWorkouts.bind(this)); // sort logic;
-    btnDeleteAll.addEventListener('click', this._removeAllEntries.bind(this)); // delete all data entries;
+    btnDeleteAll.addEventListener('click', this._deleteAllHandler.bind(this)); // delete all data entries;
     form.addEventListener('submit', this._createNewWorkout.bind(this)); // create new workout depends on type;
     inputType.addEventListener('change', this._toggleElevetionField.bind(this)); // choose type of two workout options in the form field;
 
@@ -296,8 +296,8 @@ class App {
     const workoutHTML = this._generateWorkoutHTML(workout);
     devider.insertAdjacentHTML('afterend', workoutHTML);
 
-    this._editWorkoutsBtn(workout); // for receiving workout data, need for manipulation with this data
-    this._removeHandleBtn(workout); // for receiving workout data, need for access to this workout list
+    this._editWorkoutButton(workout); // for receiving workout data, need for manipulation with this data
+    this._deleteButtonHandler(workout); // for receiving workout data, need for access to this workout list
   }
   _generateWorkoutHTML(workout) {
     const icon = workout.type === 'running' ? `🏃‍♂️` : `🚴‍♀️`;
@@ -465,26 +465,27 @@ class App {
   // TODO continue cleaning and refactoring code
   // Attached view on the workouts, include list and marker
   _moveToPopup(e) {
-    const workoutEl = e.target.closest('.workout'); // store workout data which was clicked;
+    const workoutEl = e.target.closest('.workout');
 
-    if (!workoutEl || e.target.classList.contains('workout__btn--edit')) return; // defender check, also if it was clicked on the btn instead of the workout field - return (do nothing);
-    const workout = this.#workouts.find(
-      work => work.id === workoutEl.dataset.id
-    ); // find workout which was clicked in the global workouts array;
+    // Ignore clicks on edit btn and non workout element
+    if (!workoutEl || e.target.classList.contains('workout__btn--edit')) return;
+    const workoutId = workoutEl.dataset.id;
+
+    // Finds and stores the workout which has been clicked.
+    const workout = this.#workouts.find(work => work.id === workoutId);
 
     if (!workout) return;
+
+    // Attached the view on the map to this workout
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
       pan: {
         duration: 1,
-      }, // attache view on the map to this workout;
+      },
     });
-
-    // using the API (application programming interface);
-    // workout.click(); // don't be working when we use local storage because of losing prototype chain
   }
 
-  // Method for getting data which are needed for multiple operations;
+  // Get important data
   _getWorkoutData(e) {
     const targetElement = e.target.closest('.workout');
     if (!targetElement) return;
@@ -494,136 +495,159 @@ class App {
     const currentWorkoutIndex = this.#workouts.findIndex(
       work => targetId === work.id
     );
-    return [targetElement, targetId, currentWorkout, currentWorkoutIndex]; // return data which we need;
+
+    return [targetElement, targetId, currentWorkout, currentWorkoutIndex];
   }
 
-  // Removing certain workout - logic;
-  _removeWorkOut(targetElement, currentWorkoutIndex) {
-    targetElement.remove(); // remove from current list;
-    this.#workouts.splice(currentWorkoutIndex, 1); // remove workout from the global workouts array, 1 element from currentIndex;
-    this.#markers[currentWorkoutIndex].remove(); // remove marker from the global markers array;
-    this.#markers.splice(currentWorkoutIndex, 1); // the same operations as with workouts globa array;
+  // Remove a workout and associated data
+  _removeWorkOut(targetElement, workoutIndex) {
+    // Remove form the workout list
+    targetElement.remove();
 
-    const lastWork = this.#workouts[this.#workouts.length - 1]; // after deleting find last workout in the array and store it;
-    this._setIntoView(lastWork); // take focus on the map on the last workout element;
+    // Remove the workout from the global workouts array
+    this.#workouts.splice(workoutIndex, 1);
 
-    this._setLocalStorage(); // actualize local storage;
+    // Remove the associated marker from the global markers array
+    this.#markers[workoutIndex].remove();
+    this.#markers.splice(workoutIndex, 1);
+
+    // Find the last workout in the array
+    const lastWorkout = this.#workouts[this.#workouts.length - 1];
+
+    // Set the map view to focus on the last workout
+    this._setIntoView(lastWorkout);
+
+    // Update the local storage with the latest data
+    this._setLocalStorage();
   }
 
-  // Method for removing certain workout;
-  _removeHandleBtn() {
-    const btnDelete = document.querySelector('.workout__btn--delete');
+  // Attach handler for workout delete button
+  _deleteButtonHandler() {
+    const deleteButton = document.querySelector('.workout__btn--delete');
 
-    btnDelete.addEventListener('click', e => {
+    deleteButton.addEventListener('click', e => {
       const [targetElement, , , currentWorkoutIndex] = this._getWorkoutData(e); // takes data what we need are;
       this._removeWorkOut(targetElement, currentWorkoutIndex); // call method which have removing logic;
     });
   }
 
   // Method for removing all workouts (entries);
-  _removeAllEntries() {
+  _deleteAllHandler() {
     if (this.#workouts.length === 0) return; // if there's no workout, - do nothing;
 
+    const btnClearAll = document.querySelector('.msg__btn--yes');
+    const btnCancelClear = document.querySelector('.msg__btn--no');
     const confirmMsg = document.querySelector('.confirm__msg');
-    const btnYes = document.querySelector('.msg__btn--yes');
-    const btnNo = document.querySelector('.msg__btn--no');
 
     confirmMsg.classList.remove('confirm__msg--hide'); // remove modal window with confirm message as a default;
 
-    // Do operations below depending from choose;
-    btnYes.addEventListener('click', () => {
-      // if yes
-      this._resetLocalStorage(); // clear local storage;
-      confirmMsg.classList.add('confirm__msg--hide'); // show modal window;
+    btnClearAll.addEventListener('click', () => {
+      this._resetLocalStorage();
+      confirmMsg.classList.add('confirm__msg--hide');
     });
-    btnNo.addEventListener('click', () => {
-      // if no
-      confirmMsg.classList.add('confirm__msg--hide'); // just hides up modal window and do nothing;
+    btnCancelClear.addEventListener('click', () => {
+      confirmMsg.classList.add('confirm__msg--hide');
     });
   }
 
-  // Method for observes and allows edit workout
-  _editWorkoutsBtn() {
-    const btnEdit = document.querySelector('.workout__btn--edit');
-    const btnDelete = document.querySelector('.workout__btn--delete');
-    if (!(btnEdit && btnDelete)) return; // if there is no needed btn, stop execution;
-    let editMode = false; // boolean variable for flagging edit status;
+  // Observing and allowing editing of a workout
+  _editWorkoutButton() {
+    const editButton = document.querySelector('.workout__btn--edit');
+    const deleteButton = document.querySelector('.workout__btn--delete');
 
-    btnEdit.addEventListener('click', e => {
-      // use setTimeout for avoiding delay in first click on btn
+    if (!(editButton && deleteButton)) return; // if there is no needed btn, stop execution;
+
+    let editMode = false; // boolean variable to track edit status
+
+    editButton.addEventListener('click', e => {
+      // Use setTimeout to avoid a delay on the first click of the button
       setTimeout(() => {
-        const [targetElement, targetId, ,] = this._getWorkoutData(e); // get needed data;
-        if (!targetId) return; // stop execution;
+        const [targetElement, targetId, ,] = this._getWorkoutData(e); // Get the needed data;
+        if (!targetId) return; // If no workout ID stop execution;
+
         const inputValue = targetElement // finds and store inpul values of certain workout which were clicked on;
           .closest('.workout')
           .querySelectorAll('.workout__value');
 
         inputValue.forEach(e => {
           if (
-            // check for edit status, and don't access for input value with type speed and pace (are calculating automatically)
+            // Check edit status and prevent access to input values for 'speed' and 'pace' types (calculated automatically)
             editMode &&
             e.dataset.type !== 'speed' &&
             e.dataset.type !== 'pace'
           ) {
-            e.removeAttribute('disabled'); // access for edit value;
-            btnEdit.style.backgroundColor =
-              rootStyle.getPropertyValue('--color-brand--1'); // styled btn;
-            btnEdit.style.gridColumn = 3; // positionates buttons;
-            btnDelete.style.display = 'block'; // show delete btn;
+            e.removeAttribute('disabled'); // Enable editing of the input value
+            editButton.style.backgroundColor =
+              rootStyle.getPropertyValue('--color-brand--1');
+            editButton.style.gridColumn = 3; // Adjust button position;
+            deleteButton.style.display = 'block'; // Display the delete button
           } else {
-            e.setAttribute('disabled', ''); // disabled access for edit value where edit status is false;
-            btnEdit.style.backgroundColor =
-              rootStyle.getPropertyValue('--color-brand--2'); // styled btn;
-            btnEdit.style.gridColumn = 4; // positionates buttons;
-            btnDelete.style.display = 'none'; // hide delete btn;
+            e.setAttribute('disabled', ''); // Disable editing of the input value
+            editButton.style.backgroundColor =
+              rootStyle.getPropertyValue('--color-brand--2');
+            editButton.style.gridColumn = 4; // Adjust button position
+            deleteButton.style.display = 'none'; // Hide the delete button
           }
         });
       }, 0);
-      // Change btn text content depending on edit mode: true/false;
+
+      // Change button text content based on edit mode: true/false;
       editMode
-        ? (btnEdit.textContent = 'edit')
-        : (btnEdit.textContent = 'save');
-      editMode = !editMode; // change edit boolean value for opposite each time when edit btn was clicked;
-      this._setLocalStorage(); // actualize local storage;
+        ? (editButton.textContent = 'edit')
+        : (editButton.textContent = 'save');
+      editMode = !editMode; // Toggle the edit mode boolean value
+
+      this._setLocalStorage(); // Update local storage
     });
   }
 
-  // After checking and getting access for edit workout value
+  // Method for editing a workout
   _editWorkout(e) {
-    if (!this._getWorkoutData(e)) return; // if no any data from workout list - return and stop execution;
-    const [targetElement, , currentWorkout] = this._getWorkoutData(e); // get needed data;
+    const workoutData = this._getWorkoutData(e);
+    if (!workoutData) return; // if no workoutData, stop execution
+    const [targetElement, , currentWorkout] = workoutData; // Extract the needed data
 
-    const inputValue = +e.target.value; // store target input value and converts it to a number;
-    const inputProperty = e.target.dataset.type; // store target input type value;
-    currentWorkout[inputProperty] = inputValue; // apply new value to the target workout value;
-    let type; // variable for checked workout type for future operation;
+    const inputValue = +e.target.value; // Store the target input value and convert it to a number
+    const inputProperty = e.target.dataset.type; // Store the target input type value;
+    currentWorkout[inputProperty] = inputValue; // Update the target workout value with the new value
+
+    let type; // For checking the workout type
+
+    // Call individual method based on workout type and sets type equivalent for personal method
     if (currentWorkout.type === 'running') {
-      currentWorkout.calcPace(); // if type running, call method for this object;
-      type = 'pace'; // define type as a pace (characteristic for this type of workout);
+      currentWorkout.calcPace();
+      type = 'pace';
     }
+
     if (currentWorkout.type === 'cycling') {
-      currentWorkout.calcSpeed(); // if type cycling, call method for this object;
-      type = 'speed'; // the same as above;
+      currentWorkout.calcSpeed();
+      type = 'speed';
     }
-    targetElement.querySelector(`input[data-type="${type}"]`).value =
-      currentWorkout[type].toFixed(1); // apply new value to the certain type of target workout value (means pace or speed privat characteristic);
+
+    // Update the input value for the calculated characteristic (pace or speed) of the workout
+    // prettier-ignore
+    const targetInput = targetElement.querySelector( `input[data-type="${type}"]` );
+    targetInput.value = currentWorkout[type].toFixed(1);
   }
 
-  // EXPLAIN below two method. Read documentation about stringift and parse.
-  // Set local storage
+  // Storing workout in the local storage
   _setLocalStorage() {
-    localStorage.setItem('workouts', JSON.stringify(this.#workouts)); // Creates key/name value which will be store at local storage; Name: 'workouts', and a key is an array of our created workouts. Stores in a string format, so for future use firstly need to convert it into a Javascript object using JSON.parse()
+    // Create a key/value pair in the local storage. Key: 'workouts', Value: array of workouts converted to a JSON string
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
   }
 
-  // Get local storage
+  // Retrieving workouts from local storage
   _getLocalStorage() {
-    const data = JSON.parse(localStorage.getItem('workouts')); // JS build-in function: JSON.parse() for convetes the received string into a JavaScript object;
-    if (!data) return; // check for existing data received from local storage, if no data - stop execution;
+    // Retrieve data from local storage and parse it into a JavaScript object
+    const data = JSON.parse(localStorage.getItem('workouts'));
 
-    // Re-build local storage if data has any changes;
+    if (!data) return; // Check if there is any data in local storage, if not - stop execution
+
+    // Rebuild the workouts based on the data retrieved from local storage
     data.forEach(work => {
       const typeOfWorkout = work.type;
       let newData; // for storing new Object depending on type of workout: running or cycling;
+
       if (typeOfWorkout === 'running') {
         newData = new Running(
           work.coords,
@@ -642,33 +666,30 @@ class App {
           work.elevetionGain
         );
       }
-      this.#workouts.push(newData); // push new workout object into global variable workout object;
+      this.#workouts.push(newData); // Push the new workout object into the global workouts array
     });
 
+    // Render the workouts on the map
     this.#workouts.forEach(work => {
-      this._renderWorkout(work); // rendering newly workouts object on the map;
+      this._renderWorkout(work);
     });
   }
 
-  // Helper - clear inputs
+  // Helper method to clear input fields
   _clearInputs() {
-    //Clear input fields
-    inputDistance.value =
-      inputDuration.value =
-      inputCadence.value =
-      inputElevation.value =
-        '';
+    // prettier-ignore
+    inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = '';
   }
 
-  // Helper - render workout/mark
+  // Helper method to render a workout and its marker on the map
   _helperRenderMethod(type) {
-    this._renderWorkoutMarker(type); // render marker on the map;
-    this._renderWorkout(type); // render workout on the map;
+    this._renderWorkoutMarker(type);
+    this._renderWorkout(type);
   }
 
-  // Helper - view workouts marker on the map
+  // Helper method to set the view of the map to a specific workout's marker
   _setIntoView(currentWorkout) {
-    if (!currentWorkout) return; // defender check
+    if (!currentWorkout) return; // check if a valid workout is provided
     this.#map.setView(currentWorkout.coords, this.#mapZoomLevel, {
       animate: true,
       pan: {
@@ -677,35 +698,22 @@ class App {
     });
   }
 
-  // Helper - error form messages;
+  // Helper method to display an error message in the form
   _errorFormMsg() {
-    formErrorMsg.classList.remove('form__error-hide'); // display error message;
+    formErrorMsg.classList.remove('form__error-hide'); // Display the error message;
 
-    // Hide error message after 2,5s;
+    // Hide the error message after 2,5s;
     setTimeout(() => {
       formErrorMsg.classList.add('form__error-hide');
     }, 2500);
   }
 
-  // Helper -reset all data
+  // Helper method to reset all data and reload the location
   _resetLocalStorage() {
-    // Clear all data from local storate and reload location;
     localStorage.removeItem('workouts');
-    location.reload();
+    location.reload(); // resetting the app
   }
 }
 const app = new App(); // call
 
-// Additional feature ideas: challenges
-// Ability to edit a workout; //done
-// Ability to delete a workout; //done
-// Ability to delete all workouts; //done
-// Ability to sort workouts by a certain field (e.g distance or by duration); //done
-// Re-build Running and Cycling objects coming from Local Storage; //done
-// More realistic error and confirmation messages; // done
-// Ability to position the map to show all workouts [very hard] - depends on leaflead library; //done
-// Implement clear method
-
-// TODO Ability to draw lines and shapes instead of just points [very hard] //
-// TODO Geocode location from coordinates ('Run  in Faro, Portugal') [only after asynchronous JavaScript section];
 // TODO Display weather data for workout time and place [only after asynchronous JavaScript section];

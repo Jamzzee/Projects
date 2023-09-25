@@ -437,34 +437,12 @@ class App {
     this._setIntoView(lastWorkout);
   }
 
-  // helper clear workouts and markers method
-  _clearWorkoutsAndMarkers() {
-    containerWorkouts.querySelectorAll('.workout').forEach(workout => {
-      workout.remove();
-    });
-    this.#markers.forEach(mark => mark.remove());
-    this.#markers = [];
-  }
-
   // Arrow direction depends on sort direction;
   _toggleArrow(sort, arrows, type) {
     const arrowIcon = sort ? '&#129045' : '&#129047';
     arrows.forEach(arr => {
       if (arr.dataset.type === type) arr.innerHTML = arrowIcon;
     });
-  }
-
-  // Helper sort array method
-  _sortArray(array, direction, type) {
-    // Create a sorting function based on direction and type
-    const sortFunction = (a, b) => {
-      const aValue = a[type];
-      const bValue = b[type];
-
-      return direction === 'ascending' ? aValue - bValue : bValue - aValue;
-    };
-    // use toSorted function to sort the array and create shallow copy
-    return array.toSorted(sortFunction);
   }
 
   // Attached view on the workouts, include list and marker
@@ -679,6 +657,19 @@ class App {
     });
   }
 
+  // Helper sort array method
+  _sortArray(array, direction, type) {
+    // Create a sorting function based on direction and type
+    const sortFunction = (a, b) => {
+      const aValue = a[type];
+      const bValue = b[type];
+
+      return direction === 'ascending' ? aValue - bValue : bValue - aValue;
+    };
+    // use toSorted function to sort the array and create shallow copy
+    return array.toSorted(sortFunction);
+  }
+
   // Helper method to clear input fields
   _clearInputs() {
     // prettier-ignore
@@ -712,12 +703,21 @@ class App {
     }, 2500);
   }
 
+  // Helper clear workouts and markers method
+  _clearWorkoutsAndMarkers() {
+    containerWorkouts.querySelectorAll('.workout').forEach(workout => {
+      workout.remove();
+    });
+    this.#markers.forEach(mark => mark.remove());
+    this.#markers = [];
+  }
+
   // Helper method to reset all data and reload the location
   _resetLocalStorage() {
     localStorage.removeItem('workouts');
     location.reload(); // resetting the app
   }
 }
-const app = new App(); // call
+const app = new App();
 
 // TODO Display weather data for workout time and place [only after asynchronous JavaScript section];

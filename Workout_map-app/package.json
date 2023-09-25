@@ -1,0 +1,15 @@
+{
+  "name": "fitnes-workout-tracker",
+  "version": "1.0.0",
+  "description": "The fitness workout tracker is a study web application with simple logic. Designed to help users keep track of their fitness activity",
+  "default": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "author": "Vitalii C.",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.9.3"
+  }
+}

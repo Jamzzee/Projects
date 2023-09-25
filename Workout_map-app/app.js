@@ -221,9 +221,8 @@ class App {
 
       // Set local storage to all workouts
       this._setLocalStorage();
-    }
-    // Render an error message if false
-    this._errorFormMsg();
+      // Render an error message if false
+    } else this._errorFormMsg();
   }
 
   // View workouts marker on the map
@@ -462,7 +461,6 @@ class App {
     return array.toSorted(sortFunction);
   }
 
-  // TODO continue cleaning and refactoring code
   // Attached view on the workouts, include list and marker
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout');

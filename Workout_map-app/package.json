@@ -1,7 +1,7 @@
 {
-  "name": "projects",
+  "name": "fitnes-workout-tracker",
   "version": "1.0.0",
-  "description": "Workout application with map supporting",
+  "description": "The fitness workout tracker is a study web application with simple logic. Designed to help users keep track of their fitness activity",
   "default": "index.js",
   "scripts": {
     "start": "parcel index.html",

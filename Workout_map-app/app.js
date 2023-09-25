@@ -1,29 +1,33 @@
 'use strict';
 
+// CSS variables
 const root = document.querySelector(':root');
 const rootStyle = getComputedStyle(root);
-
+// Form and error message
 const form = document.querySelector('.form');
 const formErrorMsg = document.querySelector('.form__error-msg');
+// Workout container
 const containerWorkouts = document.querySelector('.workouts');
+// Form inputs
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
-const devider = document.querySelector('.devider');
+// Divider
+const divider = document.querySelector('.divider');
+// Sort container and buttons
 const sortContainer = document.querySelector('.sort__container');
-
 const btnSort = document.querySelector('.operation__sort');
 const sortType = document.querySelector('.operation__sort--type');
 const btnView = document.querySelector('.operation__overwiev');
 const btnDeleteAll = document.querySelector('.operation__delete--all');
 
-// Create parent class
 class Workout {
-  id = (Math.random() + '').slice(-10); // specifed special ID for each workout;
+  // Generate a uniq ID for each workout
+  id = (Math.random() + '').slice(-10);
 
-  //  Build main constructor
+  //  Main constructor for workout
   constructor(coords, distance, duration, date) {
     this.coords = coords; // [lat, lng]
     this.distance = distance; // in km
@@ -31,7 +35,7 @@ class Workout {
     this.date = date; // additional property
   }
 
-  // For rendering descriptions after Mark was created
+  // Set the description for rendering after a marker is created
   _setDescription() {
     // prettier-ignore
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; // Month data
@@ -42,6 +46,7 @@ class Workout {
     const hour = date.getHours();
     const minute = String(date.getMinutes()).padStart(2, '0');
 
+    // Set description based on the type of the activity
     // prettier-ignore
     this.description = `${this.type.charAt(0).toUpperCase() + this.type.slice(1)} on ${monthName} ${day} ${hour}:${minute}`
   }
@@ -81,16 +86,16 @@ class Cycling extends Workout {
 
 // Application Architecture
 class App {
-  #map; // global map variable, which render map;
-  #mapEvent; // global variable, which contain event while clicking on the map;
-  #mapZoomLevel = 13; // additional properties for map options (zoom level);
-  #markers = []; // global variable, which contain array of rendering markers for future manipulation ;
-  #workouts = []; // global variable, which contain array of the workout data;
-  #sort = false; // global variable, uses for observe sort status;
+  #map; // global map instance for rendering the map
+  #mapEvent; // Event object containing click data when clicking on the map
+  #mapZoomLevel = 13; // Zoom level setting for the map
+  #markers = []; // Array to store markers for the map rendering and manipulation
+  #workouts = []; // Array to store workout data
+  #isSortedDescending = false; // Flag to observe the sorting status
 
   constructor() {
     // Load methods immediately
-    this._getPosition(); // Get user's position;
+    this._getPositionAndLoadMap(); // Get user's position;
     this._getLocalStorage(); // Get data form local storage;
 
     // Attached event handlers immediately when page is load
@@ -106,10 +111,10 @@ class App {
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this)); // move-up to the workout on the map, depends on which workout was clicked in the list
   }
 
-  // Wait for the _getCurrentPositionAsync to be resolved and if successful - load map
-  async _getPosition() {
+  // Get position and load map
+  async _getPositionAndLoadMap() {
     try {
-      const position = await this._getCurrentPositionAsync();
+      const position = await this._getUserCurrentPosition();
       this._loadMap(position);
     } catch (err) {
       alert(
@@ -119,7 +124,7 @@ class App {
   }
 
   // This method returns a Pormise what wraps "navigator.geolocation.getCurrentPosition"
-  _getCurrentPositionAsync() {
+  _getUserCurrentPosition() {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -136,42 +141,44 @@ class App {
     const { latitude, longitude } = position.coords;
     const coords = [latitude, longitude];
 
-    this.#map = L.map('map').setView(coords, this.#mapZoomLevel); // Store map in global variable;
+    // Create and set up the map
+    this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
 
+    // Add the OpenStreetMap layer to the map
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map); // impose layer on the map (read doc);
 
-    // Displaying a Map Marker (Handling clicks on Map)
-    this.#map.on('click', this._showForm.bind(this)); // after clicking show form for choose type of workout and other properties;
+    // Attach a click handler do display the workout form
+    this.#map.on('click', this._showWorkoutForm.bind(this)); // after clicking show form for choose type of workout and other properties;
 
     // Render markers on the map from the local storage
     this.#workouts.forEach(work => this._renderWorkoutMarker(work));
   }
 
-  // show form after click on the map and get focus for one of the inputs
-  _showForm(mapEvent) {
-    this.#mapEvent = mapEvent; // Store event in the global variable;
-    form.classList.remove('hidden'); // Display form;
-    inputDistance.focus(); // Get focus on the corrend field;
+  // Display workout form and focus on a specific field
+  _showWorkoutForm(mapEvent) {
+    this.#mapEvent = mapEvent; // Store the event in a global variable;
+    form.classList.remove('hidden');
+    inputDistance.focus();
   }
 
-  // After create new workout - hide form and clear inputs.
-  _hideForm() {
-    form.style.display = 'none'; // Hide form;
+  // Hide the workout form and clear inputs
+  _hideWorkoutForm() {
+    form.style.display = 'none';
     form.classList.add('hidden');
     setTimeout(() => {
       form.style.display = 'grid';
     }, 1000);
-    this._clearInputs(); // Call method for empty all fields;
+    this._clearInputs();
   }
 
   // Type toggle handler
   _toggleElevetionField() {
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
-    this._clearInputs(); //TODO is we need to clear all fields or just changeable field ?
+    this._clearInputs();
   }
 
   // Creates new workout depending on condition: running or cycling
@@ -217,12 +224,11 @@ class App {
       this._renderWorkoutMarker(workout);
 
       // Hide form and clear the fields (method call's inside hideForm)
-      this._hideForm();
+      this._hideWorkoutForm();
 
       // Set local storage to all workouts
       this._setLocalStorage();
-      // Render an error message if false
-    } else this._errorFormMsg();
+    } else this._errorFormMsg(); // Render an error message if false
   }
 
   // View workouts marker on the map
@@ -293,7 +299,7 @@ class App {
   // Render workout
   _renderWorkout(workout) {
     const workoutHTML = this._generateWorkoutHTML(workout);
-    devider.insertAdjacentHTML('afterend', workoutHTML);
+    divider.insertAdjacentHTML('afterend', workoutHTML);
 
     this._editWorkoutButton(workout); // for receiving workout data, need for manipulation with this data
     this._deleteButtonHandler(workout); // for receiving workout data, need for access to this workout list
@@ -397,8 +403,8 @@ class App {
     const sortType = sortingBtn.dataset.type; // get type of accessible sort option
     const sortArrows = sortContainer.querySelectorAll('.sort__arrow');
 
-    const sortOrder = this.#sort ? 'descending' : 'ascending';
-    this.#sort = !this.#sort; // switch boolean value, each time when we clicked on sort btn - needs for observes sort status;
+    const sortOrder = this.#isSortedDescending ? 'descending' : 'ascending';
+    this.#isSortedDescending = !this.#isSortedDescending; // switch boolean value, each time when we clicked on sort btn - needs for observes sort status;
 
     const sortedWorkouts = this._sortArray(this.#workouts, sortOrder, sortType); // Store sorted array in the variable, shallow copy;
 
@@ -410,7 +416,7 @@ class App {
       if (work.type === selectedSortType) this._helperRenderMethod(work);
       if (selectedSortType === 'all') this._helperRenderMethod(work);
     });
-    this._toggleArrow(this.#sort, sortArrows, sortType); // depends on sort, change arrow direction for flagging sort direction;
+    this._toggleArrow(this.#isSortedDescending, sortArrows, sortType); // depends on sort, change arrow direction for flagging sort direction;
   }
 
   //  Render workouts by type on the map

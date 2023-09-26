@@ -10,12 +10,14 @@ class RecipeView extends View {
   _succeedMessage =
     'Start by searching for a recipe or an ingredient. Have fun!';
 
+  // Add event listeners for rendering recipe view
   addHandlerRender(handler) {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
     // window.addEventListener('hashchange', handler);
     // window.addEventListener('load', handler);
   }
 
+  // Add event listener for updating servings
   addHandlerUpdateServings(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--update-servings');
@@ -25,6 +27,7 @@ class RecipeView extends View {
     });
   }
 
+  // Add event listener for adding/removing bookmarks
   addHandlerAddBookmark(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--bookmark');
@@ -33,6 +36,7 @@ class RecipeView extends View {
     });
   }
 
+  // Generate the HTML markup for the recipe view
   _generateMarkup() {
     return `
 		<figure class="recipe__fig">
@@ -116,6 +120,7 @@ class RecipeView extends View {
 `;
   }
 
+  // Generate markup for individual ingredients
   _generateMarkupIngredient(ing) {
     return `
 				<li class="recipe__ingredient">

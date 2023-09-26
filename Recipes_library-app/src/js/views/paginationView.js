@@ -4,6 +4,8 @@ import icons from 'url:../../img/icons.svg'; // Parcel 2
 class PaginationView extends View {
   _parentElement = document.querySelector('.pagination');
   _curPage;
+
+  // Generate the HTML markup for pagination
   _generateMarkup() {
     // console.log(this._data);
     this._curPage = this._data.page;
@@ -33,7 +35,7 @@ class PaginationView extends View {
       ];
     }
 
-    // New page
+    // New page (query changed)
     if (query !== this._data.query) {
       return this._generateMarkupNewPage();
     }
@@ -41,6 +43,7 @@ class PaginationView extends View {
     return '';
   }
 
+  // Generate markup for the next page button
   _generateMarkupNextPage() {
     return `
 			<button data-goto="${
@@ -54,6 +57,7 @@ class PaginationView extends View {
 			`;
   }
 
+  // Generate markup for the previous page button
   _generateMarkupPrevPage() {
     return `
     <button data-goto="${
@@ -67,6 +71,7 @@ class PaginationView extends View {
 	`;
   }
 
+  // Generate markup for displaying the total number of pages
   _genetateMarkupCountPage(count) {
     return `
     <div class="btn--inline btn--count">
@@ -75,6 +80,7 @@ class PaginationView extends View {
     `;
   }
 
+  // Generate markup for other pages (next and previous buttons)
   _generateMarkupOtherPage() {
     return `
     <button data-goto="${
@@ -96,6 +102,7 @@ class PaginationView extends View {
     `;
   }
 
+  // Add event listener for pagination button clicks
   addHandlerClick(handler) {
     this._parentElement.addEventListener('click', function (e) {
       if (e.target.closest('.btn--count')) return;

@@ -2,6 +2,7 @@ import View from './View.js';
 import {
   MAX_INGREDIENTS_WITHOUT_SCROLLBAR,
   MIN_INGREDIENTS,
+  UPDATE_LAYOUT_SEC,
 } from '../config.js';
 
 class AddNewIngredient extends View {
@@ -17,11 +18,12 @@ class AddNewIngredient extends View {
     this.addHandlerRemoveIngredient.bind(this);
     this._addNewIngredient();
   }
-
+  // Event handler for 'adding ingredient' button
   addHandlerIngredient() {
     this._btnAdd.addEventListener('click', this._addNewIngredient.bind(this));
   }
 
+  // Event handler for 'removing ingredient' button
   addHandlerRemoveIngredient() {
     this._btnDelete.addEventListener(
       'click',
@@ -29,6 +31,7 @@ class AddNewIngredient extends View {
     );
   }
 
+  // Add new ingredient input field to the DOM
   _addNewIngredient() {
     const ingCount = this._totalIngredient;
     this._totalIngredient++;
@@ -39,6 +42,7 @@ class AddNewIngredient extends View {
     );
   }
 
+  // Remove new ingredient input field from the DOM
   _removeLastIngredientFromDOM() {
     if (this._totalIngredient === MIN_INGREDIENTS) return;
     const lastIngredient = this._parentElement.lastElementChild;
@@ -48,6 +52,7 @@ class AddNewIngredient extends View {
     this._toggleScrollBar();
   }
 
+  // Toggle the visibility of the scrollbar based on the number of ingredients
   _toggleScrollBar() {
     this._parentElement.classList.toggle(
       'upload__overflow--hidden',
@@ -55,6 +60,7 @@ class AddNewIngredient extends View {
     );
   }
 
+  // Update the leyout of labels, including margin adjustment
   _updateLablesLayout() {
     const labels = document.querySelectorAll('.upload__fields');
     // console.log(labels.length);
@@ -71,8 +77,9 @@ class AddNewIngredient extends View {
     }
   }
 
+  // Generate the HTML markup for a new ingredient input
   _generateMarkupIngredient(ingNumber) {
-    setTimeout(() => this._updateLablesLayout(), 0.1);
+    setTimeout(() => this._updateLablesLayout(), UPDATE_LAYOUT_SEC);
     return `
 						<label class="upload__fields">Ingredient ${ingNumber}:
 									<input	value="" type="text" id="setMargin" name="ingredient-${ingNumber}-Quantity" placeholder='Quantity'/>

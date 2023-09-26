@@ -4,7 +4,9 @@ import icons from 'url:../../img/icons.svg'; // Parcel 2
 class PreviewView extends View {
   _parentElement = '';
 
+  // Generate the HTML markup for a recipe preview
   _generateMarkup() {
+    // Get the recipe ID from the URL hash
     const id = window.location.hash.slice(1);
 
     return `

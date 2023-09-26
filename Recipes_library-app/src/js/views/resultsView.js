@@ -7,11 +7,12 @@ class ResultsView extends View {
   _errorMessage = 'No recipes found for your query! Please try again ;)';
   _succeedMessage = '';
 
+  // Generate the HTML markup for the results view
   _generateMarkup() {
     // console.log(this._data);
     return this._data
-      .map(result => previewView.render(result, false))
-      .join('');
+      .map(result => previewView.render(result, false)) // Render each result using the previewView
+      .join(''); // Combine the HTML markup for all results into a single stirng
   }
 }
 

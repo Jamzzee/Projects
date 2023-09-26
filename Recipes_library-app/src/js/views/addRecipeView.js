@@ -22,24 +22,30 @@ class AddRecipeView extends View {
     this._addHandlerPreventDefaultBtn();
   }
 
+  // Toggle the recipe upload window
   toggleWindow() {
     this._overlay.classList.toggle('hidden');
     this._window.classList.toggle('hidden');
   }
+
+  // Event handler for showing the recipe upload window
   _addHandlerShowWindow() {
     this._btnOpen.addEventListener('click', this.toggleWindow.bind(this));
   }
 
+  // Event handler for hiding the recipe upload window
   _addHandlerHideWindow() {
     this._btnClose.addEventListener('click', this.toggleWindow.bind(this));
     this._overlay.addEventListener('click', this.toggleWindow.bind(this));
   }
 
+  // Prevent default form submission for certain buttons
   _addHandlerPreventDefaultBtn() {
     this._btnAdd.addEventListener('click', e => e.preventDefault());
     this._btnDelete.addEventListener('click', e => e.preventDefault());
   }
 
+  // Check for empty ingredient imput fields in the form
   _checkIngredientInputsForm(data) {
     const ing = Object.entries(data);
 
@@ -67,12 +73,14 @@ class AddRecipeView extends View {
     return true;
   }
 
+  // Add an error message to the DOM
   _addMessageToDOM(message) {
     const errorFormInputMsg = document.querySelector('.upload__error--msg');
     errorFormInputMsg.textContent = message;
     errorFormInputMsg.classList.toggle('hidden', false);
   }
 
+  // Add event handler for form submission
   addHandlerUpload(handler) {
     const self = this;
     this._parentElement.addEventListener('submit', function (e) {

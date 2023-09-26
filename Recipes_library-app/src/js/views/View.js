@@ -1,6 +1,7 @@
 import icons from 'url:../../img/icons.svg'; // Parcel 2
+
 export default class View {
-  _data;
+  _data; // Data to be rendered
 
   /**
    * Render the recived object to the DOM
@@ -24,27 +25,36 @@ export default class View {
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
+  // Clear the parent element's content
   _clear() {
     this._parentElement.innerHTML = '';
   }
 
+  // Update the view with new data
   update(data) {
     // if (!data || (Array.isArray(data) && data.length === 0))
     //   return this.renderError();
 
+    // Set the data property of the view to the new data
     this._data = data;
+
+    // Generate new markup based on the update data
     const newMarkup = this._generateMarkup();
 
+    // Create a new DOM fragment from the general markup
     const newDOM = document.createRange().createContextualFragment(newMarkup);
+
+    // Get lists of elements in both the new and current DOM
     const newElements = Array.from(newDOM.querySelectorAll('*'));
     const curElements = Array.from(this._parentElement.querySelectorAll('*'));
     // console.log(newElements, curElements);
 
+    // Iterate through the new elements
     newElements.forEach((newEl, i) => {
       const curEl = curElements[i];
       // console.log(curEl, newEl.isEqualNode(curEl));
 
-      // Updates changed TEXT
+      // Update text content if it has changed
       if (
         !newEl.isEqualNode(curEl) &&
         newEl.firstChild?.nodeValue.trim() !== ''
@@ -53,7 +63,7 @@ export default class View {
         curEl.textContent = newEl.textContent;
       }
 
-      // Updates changed ATTRIBUTES
+      // Update attributes if the have changed
       if (!newEl.isEqualNode(curEl))
         Array.from(newEl.attributes).forEach(attr =>
           curEl.setAttribute(attr.name, attr.value)
@@ -61,6 +71,7 @@ export default class View {
     });
   }
 
+  // Render a loading spinner
   renderSpinner() {
     const markup = `
 		<div class="spinner">
@@ -73,6 +84,7 @@ export default class View {
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
+  // Render an error message
   renderError(message = this._errorMessage) {
     const markup = `
 				<div class="error">
@@ -89,6 +101,7 @@ export default class View {
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
+  // Render a success message
   renderMessage(message = this._succeedMessage) {
     const markup = `
 				<div class="message">

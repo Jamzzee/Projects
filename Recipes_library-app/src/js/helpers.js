@@ -1,5 +1,6 @@
 import { TIMEOUT_SEC } from './config';
 
+// Function to handle timeouts
 const timeout = function (s) {
   return new Promise(function (_, reject) {
     setTimeout(function () {
@@ -8,42 +9,10 @@ const timeout = function (s) {
   });
 };
 
-/* 
-export const getJson = async function (url) {
-  try {
-    const res = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-    return data;
-  } catch (err) {
-    throw err;
-  }
-};
-
-export const sendJson = async function (url, uploadData) {
-  try {
-    const fetchPro = fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(uploadData),
-    });
-    const res = await Promise.race([fetchPro, timeout(TIMEOUT_SEC)]);
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-    return data;
-  } catch (err) {
-    throw err;
-  }
-};
- */
-
-// Refactoring two functions above
+// AJAX function for making GET and POST requests
 export const AJAX = async function (url, uploadData = undefined) {
   try {
+    // Check if there is uploadDaata (for a POST request) or not (for a GET request)
     const fetchPro = uploadData
       ? fetch(url, {
           method: 'POST',
@@ -52,9 +21,12 @@ export const AJAX = async function (url, uploadData = undefined) {
           },
           body: JSON.stringify(uploadData),
         })
-      : fetch(url);
+      : fetch(url); // If uploadData is undefined, make a GET request to the specified URL
 
+    // Wait for either the fetch request or a timeout (Promise.race)
     const res = await Promise.race([fetchPro, timeout(TIMEOUT_SEC)]);
+
+    // Parse the response body as JSON
     const data = await res.json();
 
     if (!res.ok) throw new Error(`${data.message} (${res.status})`);

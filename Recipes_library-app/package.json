@@ -1,7 +1,7 @@
 {
-  "name": "forkiy-recipy",
+  "name": "recipes-library",
   "version": "1.0.0",
-  "description": "Recipe application",
+  "description": "This web application allows you to search for and explore various recipes",
   "default": "index.js",
   "scripts": {
     "start": "parcel index.html",

@@ -1,0 +1,22 @@
+{
+  "name": "recipes-library",
+  "version": "1.0.0",
+  "description": "This web application allows you to search for and explore various recipes",
+  "default": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --no-scope-hoist --dist-dir ./dist"
+  },
+  "author": "Vitalii Chalbash",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.9.3",
+    "parcel": "^2.2.1"
+  },
+  "dependencies": {
+    "core-js": "^3.32.1",
+    "fractional": "^1.0.0",
+    "fracty": "^1.0.9",
+    "regenerator-runtime": "^0.14.0"
+  }
+}

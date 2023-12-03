@@ -5,6 +5,6 @@ Omnifood is an AI-powered food subscription that will make you eat healthy again
 ## Live Demo
 
 You can try out the The Omnifood by visiting the following link:
-[Netlify App](https://omni-smart.netlify.app/)
+[Omnifood](https://omni-smart.netlify.app/)
 
 ### Strat eating well!

@@ -5,6 +5,6 @@ Natours - the place where you can find exciting tours for your inspiration. It i
 ## Live Demo
 
 You can try out the The Natours by visiting the following link:
-[Natours](https://omni-smart.netlify.app/)
+[Natours](https://adventours-tours.netlify.app/)
 
 ### Enjoy your tours!

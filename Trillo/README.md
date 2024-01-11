@@ -15,4 +15,4 @@ For build the project, use next:
 
 ## Live Demo
 
-Check out the live demo [here] (https://trillo-web-booking.netlify.app/)
+Check out the live demo [here](https://trillo-web-booking.netlify.app/)

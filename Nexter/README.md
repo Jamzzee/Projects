@@ -15,4 +15,4 @@ For building the project, use:
 
 ## Live Demo
 
-Check out the live demo [here] ()
+Check out the live demo [here] (https://nexter-prime-homes.netlify.app/)

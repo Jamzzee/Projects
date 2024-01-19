@@ -8,5 +8,4 @@ Natours - the place where you can find exciting tours for your inspiration. It i
 
 ### Live Demo
 
-You can try out the The Natours by visiting the following link:
-[Natours](https://adventours-tours.netlify.app/)
+Check out the live demo [here](https://adventours-tours.netlify.app/)

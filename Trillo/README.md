@@ -10,7 +10,7 @@ Trillo is an all-in-one booking web app.
 
 To run the project in development mode, use the following command:
 `npm start`</br>
-For build the project, use next:
+For building the project, use next:
 `npm run build:css`
 
 ## Live Demo

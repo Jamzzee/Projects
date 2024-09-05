@@ -26,7 +26,7 @@ Welcome to my project portfolio! Explore a collection of web applications showca
 
 2.  **Trillo**  
      _All-in-one web app for booking hotels, flights, and more._  
-    [Live Demo](https://trillo-web-booking.netlify.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Trillo)
+     [Live Demo](https://trillo-web-booking.netlify.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Trillo)
 
 3.  **Nexter**  
      _Find the best homes in prime locations with this real estate app._
@@ -34,16 +34,16 @@ Welcome to my project portfolio! Explore a collection of web applications showca
 
 4.  **Natours**  
      _Explore exciting tours to inspire your next adventure._  
-    [Live Demo](https://adventours-tours.netlify.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Natours)
+     [Live Demo](https://adventours-tours.netlify.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Natours)
 
 ## Group 2: Practice with JavaScript
 
 1. **Workout Maps**  
-    _Elevate your fitness journey with this web app for creating and tracking personalized workout routines._
+   _Elevate your fitness journey with this web app for creating and tracking personalized workout routines._
    [Live Demo](https://workout-maps.netlify.app) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Workout_map-app)
 
 2. **Recipes Library**  
-    _Discover and explore diverse cuisines with this culinary web app._
+   _Discover and explore diverse cuisines with this culinary web app._
    [Live Demo](https://recipes-library.netlify.app) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Recipes_library-app)
 
 ---

@@ -4,48 +4,54 @@ Welcome to my project portfolio! Explore a collection of web applications showca
 
 ## Technology Skills
 
-- **HTML/XHTML:** Crafting structured and semantic web content.
+- **HTML/XHTML**: Crafting structured and semantic web content.
+- **CSS/SCSS/SASS**: Styling and design using preprocessors like SCSS/SASS for efficient development.
+- **JavaScript (ES6+)**: Developing dynamic and interactive web applications.
+- **React.js**: Building modular, component-based user interfaces.
+- **React Router**: Managing navigation in single-page applications (SPA).
+- **State Management**: Using React's `useState`, `useReducer`, and external libraries like Redux for global state management.
+- **Redux Toolkit**: Efficiently managing application state using Redux with simplified syntax and patterns.
+- **React Hooks**: Leveraging `useEffect`, `useContext`, and custom hooks for managing side effects and data flow.
+- **Axios/Fetch**: Making HTTP requests to REST APIs for data fetching and manipulation.
+- **React Context API**: Handling application-wide state without third-party libraries.
+- **Styled Components**: Writing CSS in JS for reusable and maintainable UI components.
+- **Code Structure & Architecture (MVC)**: Building modular, maintainable code using the Model-View-Controller pattern.
+- **Web Performance Optimization**: Enhancing loading times, code splitting with React's lazy loading, and improving user experience.
 
-- **CSS/SCSS/SASS:** Styling and design, using preprocessors like SCSS/SASS for enhanced development.
+## Group 1: Practice with CSS/SCSS/SASS
 
-- **JavaScript:** Developing dynamic and interactive web experiences.
+1.  **Omni Smart**  
+    _AI-powered food subscription service for a healthier lifestyle._
+    [Live Demo](https://omni-smart.netlify.app) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Omnifood)
 
-- **Code Structure and Architecture (MVC):** Creating modular and maintainable code structures using the Model-View-Controller (MVC) architectural pattern.
+2.  **Trillo**  
+     _All-in-one web app for booking hotels, flights, and more._  
+    [Live Demo](https://trillo-web-booking.netlify.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Trillo)
 
-- **Web Performance Optimization:** Optimizing web performance for faster loading times and a smoother user experience.
+3.  **Nexter**  
+     _Find the best homes in prime locations with this real estate app._
+    [Live Demo](https://nexter-prime-homes.netlify.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Nexter)
 
-## Group 1: Practice with JavaScript
+4.  **Natours**  
+     _Explore exciting tours to inspire your next adventure._  
+    [Live Demo](https://adventours-tours.netlify.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Natours)
 
-### Workout Maps
+## Group 2: Practice with JavaScript
 
-- **Introduction:** Elevate your fitness journey with Workout Maps. A web app designed for creating and tracking personalized workout routines. This is a demo version of the app.
-- **Link:** [Workout Maps](https://workout-maps.netlify.app)
+1. **Workout Maps**  
+    _Elevate your fitness journey with this web app for creating and tracking personalized workout routines._
+   [Live Demo](https://workout-maps.netlify.app) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Workout_map-app)
 
-### Recipes Library
+2. **Recipes Library**  
+    _Discover and explore diverse cuisines with this culinary web app._
+   [Live Demo](https://recipes-library.netlify.app) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Recipes_library-app)
 
-- **Introduction:** Dive into the world of culinary delights with Recipes Library. Explore diverse cuisines and discover new favorites to elevate your cooking experience.
-- **Link:** [Recipes Library](https://recipes-library.netlify.app)
+---
 
-## Group 2: Practice with CSS/SCSS/SASS
+## **Upcoming Project**
 
-### Omni Smart
+- **The Oasis (React Project)** – _A new project built using React. Coming soon!_
 
-- **Introduction:** Embrace a healthier lifestyle with Omni Smart, an AI-powered food subscription service.
-- **Link:** [Omni Smart](https://omni-smart.netlify.app)
-
-### Trillo
-
-- **Introduction:** All-in-one booking web app.
-- **Link:** [Trillo](https://trillo-web-booking.netlify.app/)
-
-### Nexter
-
-- **Introduction:** Place where you can find the best homes in prime location.
-- **Link:** [Nexter](https://nexter-prime-homes.netlify.app/)
-
-### Natours
-
-- **Introduction:** Place where you can find exciting tours for your inspiration.
-- **Link:** [Natours](https://adventours-tours.netlify.app/)
+---
 
 Feel free to let me know if you have further preferences of if you'd like additional content added!

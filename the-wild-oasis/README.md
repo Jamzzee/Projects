@@ -1,3 +1,3 @@
 # The Wild Oasis
 
-## React + Vite
+Main project which built using React Query and Supabase.

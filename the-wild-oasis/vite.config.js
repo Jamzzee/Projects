@@ -6,4 +6,11 @@ import eslint from 'vite-plugin-eslint';
 export default defineConfig({
   plugins: [react(), eslint],
   base: '/',
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined, // Let Vite handle chunking
+      },
+    },
+  },
 });

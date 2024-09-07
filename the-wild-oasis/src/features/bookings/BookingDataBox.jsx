@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { format, isPast, isToday } from 'date-fns';
+import { format, isToday } from 'date-fns';
 import {
   HiOutlineChatBubbleBottomCenterText,
   HiOutlineCheckCircle,

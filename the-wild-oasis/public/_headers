@@ -1,0 +1,4 @@
+# Force Netlify to serve JS files with the correct MIME type
+/* 
+  *.js    Content-Type: application/javascript
+  *.css   Content-Type: text/css

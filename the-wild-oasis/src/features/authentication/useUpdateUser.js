@@ -11,8 +11,6 @@ export function useUpdateUser() {
       toast.success('User account successfully updated'),
         // Update query in the cache directly set a new updating user in the react query cache
         queryClient.setQueryData(['user'], user);
-
-      // queryClient.invalidateQueries({ queryKey: ['user'] });
     },
     onError: err => toast.error(err.message),
   });

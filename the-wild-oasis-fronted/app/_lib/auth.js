@@ -33,7 +33,7 @@ const authConfig = {
     },
     // Tells NextAuth which URL to use for sing-in
     redirect: async (url, baseUrl) => {
-      if (url.startsWith('/account')) {
+      if (typeof url === 'string' && url.startsWith('/account')) {
         return `${nextAuthUrl}${url}`;
       }
       return baseUrl;

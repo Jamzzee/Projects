@@ -31,13 +31,13 @@ const authConfig = {
       session.user.guestId = guest.id;
       return session;
     },
-  },
-  // Tells NextAuth which URL to use for sing-in
-  redirect: async (url, baseUrl) => {
-    if (url.startsWith('/account')) {
-      return `${nextAuthUrl}${url}`;
-    }
-    return baseUrl;
+    // Tells NextAuth which URL to use for sing-in
+    redirect: async (url, baseUrl) => {
+      if (url.startsWith('/account')) {
+        return `${nextAuthUrl}${url}`;
+      }
+      return baseUrl;
+    },
   },
   pages: {
     signIn: '/login',

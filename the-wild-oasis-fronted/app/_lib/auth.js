@@ -16,29 +16,25 @@ const authConfig = {
         const existingGuest = await getGuest(user.email);
 
         if (!existingGuest)
-          await createGuest({
-            email: user.email,
-            fullName: user.name,
-          });
+          await createGuest({ email: user.email, fullName: user.name });
 
         return true;
       } catch {
         return false;
       }
     },
+    redirect: async ({ url, baseUrl }) => {
+      if (url.startsWith('/account')) {
+        const finalRedirectUrl = `${nextAuthUrl.replace(/\/$/, '')}${url}`;
+        return finalRedirectUrl;
+      } else {
+        return baseUrl;
+      }
+    },
     async session({ session, user }) {
       const guest = await getGuest(session.user.email);
       session.user.guestId = guest.id;
       return session;
-    },
-    // Tells NextAuth which URL to use for sing-in
-    redirect: async ({ url, baseUrl }) => {
-      if (typeof url === 'string' && url.startsWith('/account')) {
-        // Ensure nextAuthUrl is properly used and avoid redundant base URL
-        const finalRedirectUrl = `${nextAuthUrl.replace(/\/$/, '')}${url}`;
-        return finalRedirectUrl;
-      }
-      return baseUrl;
     },
   },
   pages: {

@@ -1,22 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## **Tech Stack & Features**
 
-## Getting Started
+**Framework & Development Tools:**
 
-First, run the development server:
+- **Next.js** – React framework for SSR & API routes
+- **ESLint** – Code linting
+- **PostCSS** – CSS transformation
+- **TailwindCSS** – Utility-first styling
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Authentication & Database:**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **NextAuth.js** – Secure authentication system
+- **Supabase** – Backend-as-a-service (auth & database)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+**UI & User Experience:**
+
+- **Heroicons** – Icon library for UI
+- **React Hot Toast** – User notifications
+- **React Day Picker** – Date selection component
+
+**Date & Time Handling:**
+
+- **Date-fns** – Modern JavaScript date utility
 
 ## Live Demo
 

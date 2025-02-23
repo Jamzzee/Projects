@@ -20,4 +20,4 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 ## Live Demo
 
-Check out the live demo [here]()
+Check out the live demo [here](https://the-wild-oasis-frontend-six.vercel.app/)

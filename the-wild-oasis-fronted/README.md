@@ -24,4 +24,4 @@
 
 ## Live Demo
 
-Check out the live demo [here](https://the-wild-oasis-frontend-six.vercel.app/)
+Check out the live demo [here](https://the-wild-oasis-frontend-seven.vercel.app)

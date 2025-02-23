@@ -2,17 +2,8 @@ import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
 import { createGuest, getGuest } from './data-service';
 
-// Next auth v4
-// const authConfig = {
-//   providers: [
-//     Google({
-//       clientId: process.env.AUTH_GOOGLE_ID,
-//       clientSecret: process.env.AUTH_GOOGLE_SECRET,
-//     }),
-//   ],
-// };
-
-// Next auth v5
+//* Set the correct URL (local or prod)
+const nextAuthUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
 const authConfig = {
   providers: [Google],
@@ -41,6 +32,13 @@ const authConfig = {
       session.user.guestId = guest.id;
       return session;
     },
+  },
+  // Tells NextAuth which URL to use for sing-in
+  redirect: async (url, baseUrl) => {
+    if (url.startsWith('/account')) {
+      return `${nextAuthUrl}${url}`;
+    }
+    return baseUrl;
   },
   pages: {
     signIn: '/login',

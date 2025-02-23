@@ -17,6 +17,7 @@ Welcome to my project portfolio! Explore a collection of web applications showca
 - **Styled Components**: Writing CSS in JS for reusable and maintainable UI components.
 - **Code Structure & Architecture (MVC)**: Building modular, maintainable code using the Model-View-Controller pattern.
 - **Web Performance Optimization**: Enhancing loading times, code splitting with React's lazy loading, and improving user experience.
+- **Next.js**:Framework for building React applications with server-side rendering and static site generation.
 
 ## Group 1: Practice with CSS/SCSS/SASS
 
@@ -47,6 +48,17 @@ Welcome to my project portfolio! Explore a collection of web applications showca
    [Live Demo](https://recipes-library.netlify.app) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/Recipes_library-app)
 
 ---
+
+## Group 3: For the separate projects:
+
+1. **The Wild Oasis - Frontend**
+   _For the user-facing reservation system_
+   [Live Demo](https://the-wild-oasis-frontend-six.vercel.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/the-wild-oasis-fronted)
+
+2. **The Wild Oasis - Backed**
+   _For the admin panel & API_
+   _⚠ Access Note: The backend requires login credentials. If you need access, please contact me directly._
+   [Live Demo](https://the-wild-oasis-backend.vercel.app/login) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/the-wild-oasis-backend)
 
 ## **Upcoming Project**
 

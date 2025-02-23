@@ -53,7 +53,7 @@ Welcome to my project portfolio! Explore a collection of web applications showca
 
 1. **The Wild Oasis - Frontend**
    _For the user-facing reservation system_ </br>
-   [Live Demo](https://the-wild-oasis-frontend-six.vercel.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/the-wild-oasis-fronted)
+   [Live Demo](https://the-wild-oasis-frontend-flax.vercel.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/the-wild-oasis-fronted)
 
 2. **The Wild Oasis - Backed**
    _For the admin panel & API_ </br>

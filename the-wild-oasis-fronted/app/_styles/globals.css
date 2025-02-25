@@ -37,3 +37,9 @@
     --rdp-background-color: theme('colors.accent.600') !important;
     margin: 0 !important;
   }
+
+    /* For booked data range */
+    .user-booked-date {
+      color: green;
+    font-weight: bold;
+  }

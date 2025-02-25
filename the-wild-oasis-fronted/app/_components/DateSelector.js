@@ -20,7 +20,7 @@ function isAlreadyBooked(range, datesArr) {
   );
 }
 
-function DateSelector({ settings, cabin, bookedDates }) {
+function DateSelector({ settings, cabin, bookedDates, userBookedDates }) {
   const {
     range = { from: null, to: null },
     setRange,
@@ -29,12 +29,6 @@ function DateSelector({ settings, cabin, bookedDates }) {
 
   //  Create a new range for fixing adding already booked range and resetting it to an empty object to prevent conflicts. This ensures that users don't accidentally select an already booked date.
   const displayRange = isAlreadyBooked(range, bookedDates) ? {} : range;
-
-  // CHANGE
-  // const regularPrice = 23;
-  // const discount = 23;
-  // const numNights = 23;
-  // const cabinPrice = 23;
 
   const { regularPrice, discount } = cabin || {};
   const numNights =
@@ -63,6 +57,15 @@ function DateSelector({ settings, cabin, bookedDates }) {
         disabled={curDate =>
           isPast(curDate) || bookedDates.some(date => isSameDay(date, curDate))
         } // Disabled all days before today and all days that are already booked
+        modifiers={{
+          userBooked: day =>
+            userBookedDates
+              .filter(day => !isPast(day))
+              .some(userDate => isSameDay(userDate, day)),
+        }}
+        modifiersClassNames={{
+          userBooked: 'user-booked-date',
+        }}
       />
 
       <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">

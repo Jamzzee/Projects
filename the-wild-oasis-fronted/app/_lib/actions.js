@@ -17,10 +17,6 @@ export async function signOutAction() {
 }
 
 export async function updateGuest(formData) {
-  // Here we do only back-end. So we need to be sure about two things:
-  // - user which invoke this action need to be autorized;
-  // - we need to treat all the inputs are 'UNSAVE'
-
   const session = await auth();
   if (!session) throw new Error('You must be loggen in');
 
@@ -64,8 +60,6 @@ export async function deleteReservation(bookingId) {
 }
 
 export async function updateReservation(formData) {
-  // if (!formData) throw new Error('Form data is required');
-
   // 1. Check authentication and authorization
   const session = await auth();
   if (!session) throw new Error('You must be log in');
@@ -79,8 +73,9 @@ export async function updateReservation(formData) {
   // 2. Get form data and update reservation
   const observations = formData.get('observations').slice(0, 1000); // Max 1000 characters
   const numGuests = formData.get('numGuests');
+  const hasBreakfast = formData.get('hasBreakfast') === 'on';
 
-  const updatedFields = { numGuests, observations };
+  const updatedFields = { numGuests, observations, hasBreakfast };
   const { error } = await supabase
     .from('bookings')
     .update(updatedFields)
@@ -103,7 +98,7 @@ export async function updateReservation(formData) {
 // '/cabins/[id]' - reservation form and so on
 
 export async function createBooking(bookingData, formData) {
-  // console.log(bookingData, formData);
+  console.log(bookingData, formData);
   const session = await auth();
   if (!session) throw new Error('You must be log in');
 
@@ -115,7 +110,7 @@ export async function createBooking(bookingData, formData) {
     extrasPrice: 0,
     totalPrice: bookingData.cabinPrice,
     isPaid: false,
-    hasBreakfast: false,
+    hasBreakfast: bookingData.hasBreakfast,
     status: 'unconfirmed',
   };
 

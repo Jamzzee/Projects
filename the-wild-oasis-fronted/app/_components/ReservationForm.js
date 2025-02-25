@@ -4,16 +4,31 @@ import { differenceInDays } from 'date-fns';
 import { useReservation } from './ReservationContext';
 import { createBooking } from '../_lib/actions';
 import SubmitButton from './SubmitButton';
+import { useState } from 'react';
+import { formatCurrency } from '../_utils/helpers';
 
-function ReservationForm({ cabin, user }) {
+function ReservationForm({ cabin, user, settings }) {
   const { range, resetRange } = useReservation();
-  // CHANGE
+  const [numGuests, setNumGuests] = useState();
+  const [includeBreakfast, setIncludeBreakfast] = useState(false);
+
   const { maxCapacity, regularPrice, discount, id: cabinId } = cabin;
 
   const startDate = range?.from || null;
   const endDate = range?.to || null;
-  const numNights = differenceInDays(endDate, startDate);
+  const numNights =
+    startDate && endDate && differenceInDays(endDate, startDate);
   const cabinPrice = numNights * (regularPrice - discount);
+
+  function handleNumberGuests(e) {
+    setNumGuests(Number(e.target.value));
+  }
+  function handleBreakfastChange(e) {
+    setIncludeBreakfast(e.target.checked);
+  }
+
+  const optionalBreakfastPrice =
+    numNights && numGuests && settings.breakfastPrice * numNights * numGuests;
 
   const bookingData = {
     startDate,
@@ -21,6 +36,7 @@ function ReservationForm({ cabin, user }) {
     numNights,
     cabinPrice,
     cabinId,
+    hasBreakfast: includeBreakfast,
   };
 
   // For adding additional data to the action form we could use bind method which allow us to add necessary data as an second argument of this function.
@@ -47,7 +63,7 @@ function ReservationForm({ cabin, user }) {
         // action={createBookingWithData}
         action={async formData => {
           await createBookingWithData(formData);
-          resetRange;
+          resetRange();
         }}
         className="bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col"
       >
@@ -58,6 +74,8 @@ function ReservationForm({ cabin, user }) {
             id="numGuests"
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
             required
+            value={numGuests}
+            onChange={handleNumberGuests}
           >
             <option value="" key="">
               Select number of guests...
@@ -69,6 +87,20 @@ function ReservationForm({ cabin, user }) {
             ))}
           </select>
         </div>
+        {optionalBreakfastPrice ? (
+          <div className="flex gap-2 items-baseline">
+            <input
+              type="checkbox"
+              name="hasBreakfast"
+              id="hasBreakfast"
+              checked={includeBreakfast}
+              onChange={handleBreakfastChange}
+            />
+            <label htmlFor="hasBreakfast">
+              Want to add breakfast for {formatCurrency(optionalBreakfastPrice)}
+            </label>
+          </div>
+        ) : null}
 
         <div className="space-y-2">
           <label htmlFor="observations">
@@ -90,10 +122,6 @@ function ReservationForm({ cabin, user }) {
           ) : (
             <SubmitButton pendingLabel="Reserving">Reserve now</SubmitButton>
           )}
-
-          {/* <button className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
-            Reserve now
-          </button> */}
         </div>
       </form>
     </div>

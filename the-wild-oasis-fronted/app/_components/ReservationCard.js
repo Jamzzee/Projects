@@ -37,6 +37,12 @@ function ReservationCard({ booking, onDelete }) {
       <div className="flex-grow px-6 py-3 flex flex-col">
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold">
+            <span>
+              {isToday(new Date(startDate))
+                ? 'Today'
+                : formatDistanceFromNow(startDate)}{' '}
+              &rarr;{' '}
+            </span>
             {numNights} nights in Cabin {name}
           </h3>
 
@@ -81,6 +87,12 @@ function ReservationCard({ booking, onDelete }) {
           </p>
           <p className="ml-auto text-sm text-primary-400">
             Booked {format(new Date(created_at), 'EEE, MMM dd yyyy, p')}
+          </p>
+          <p className="ml-auto text-sm text-primary-400">
+            <span>
+              {format(new Date(startDate), 'MMM dd yyyy')} &mdash;{' '}
+              {format(new Date(endDate), 'MMM dd yyyy')}
+            </span>
           </p>
         </div>
       </div>

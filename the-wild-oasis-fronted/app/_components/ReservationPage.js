@@ -2,13 +2,25 @@
 
 import { updateReservation } from '@/app/_lib/actions';
 import SubmitButton from './SubmitButton';
+import { formatCurrency } from '../_utils/helpers';
+import { useState } from 'react';
 
 function ReservationPage({
   reservationId,
   maxCapacity,
   numGuests,
   observations,
+  numNights,
+  breakfastPrice,
+  hasBreakfast,
 }) {
+  const [updateNumGuests, setUpdateNumGuests] = useState(numGuests);
+  const optionalBreakfastPrice = breakfastPrice * numNights * updateNumGuests;
+
+  function handleUpdateNumGuests(e) {
+    setUpdateNumGuests(e.target.value);
+  }
+
   return (
     <div>
       <h2 className="font-semibold text-2xl text-accent-400 mb-7">
@@ -25,7 +37,8 @@ function ReservationPage({
           <select
             name="numGuests"
             id="numGuests"
-            defaultValue={numGuests}
+            defaultValue={updateNumGuests}
+            onChange={handleUpdateNumGuests}
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
             required
           >
@@ -38,6 +51,18 @@ function ReservationPage({
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="flex gap-2 items-baseline">
+          <input
+            type="checkbox"
+            name="hasBreakfast"
+            id="hasBreakfast"
+            defaultChecked={hasBreakfast}
+          />
+          <label htmlFor="hasBreakfast">
+            Want to add breakfast for {formatCurrency(optionalBreakfastPrice)}
+          </label>
         </div>
 
         <div className="space-y-2">

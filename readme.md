@@ -49,7 +49,7 @@ Welcome to my project portfolio! Explore a collection of web applications showca
 
 ---
 
-## Group 3: For the separate projects:
+## Group 3: Practice with React & NextJS:
 
 1. **The Wild Oasis - Frontend**
    _For the user-facing reservation system_ </br>
@@ -59,6 +59,10 @@ Welcome to my project portfolio! Explore a collection of web applications showca
    _For the admin panel & API_ </br>
    _⚠ Access Note: The backend requires login credentials. If you need access, please contact me directly._ </br>
    [Live Demo](https://the-wild-oasis-backend.vercel.app/login) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/main/the-wild-oasis-backend)
+
+3. **Worldwide-countries**
+   _Explore different countiries._ </br>
+   [Live Demo](https://worldwide-countires.vercel.app/) | [GitHub Repo](https://github.com/Jamzzee/Projects/tree/p_worldwide-countries/worldwide-countries)
 
 ## **Upcoming Project**
 

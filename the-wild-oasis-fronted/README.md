@@ -17,6 +17,7 @@
 - **Heroicons** – Icon library for UI
 - **React Hot Toast** – User notifications
 - **React Day Picker** – Date selection component
+- **Fully responsive**
 
 **Date & Time Handling:**
 

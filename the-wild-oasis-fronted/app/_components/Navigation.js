@@ -6,47 +6,22 @@ export default async function Navigation() {
   const session = await auth();
 
   return (
-    <nav className="z-10 text-xl">
-      <ul className="flex gap-16 items-center">
+    <nav className="z-10">
+      <ul className="flex items-center gap-4 text-sm sm:gap-8 sm:text-base md:gap-12 md:text-xl">
         <li>
-          <Link
-            href="/cabins"
-            className="hover:text-accent-400 transition-colors"
-          >
+          <Link href="/cabins" className="transition-colors hover:text-accent-400">
             Cabins
           </Link>
         </li>
+
         <li>
-          <Link
-            href="/about"
-            className="hover:text-accent-400 transition-colors"
-          >
+          <Link href="/about" className="transition-colors hover:text-accent-400">
             About
           </Link>
         </li>
+
         <li>
           <UserMenu session={session} />
-          {/* {session?.user?.image ? (
-            <Link
-              href="/account"
-              className="hover:text-accent-400 transition-colors flex item-center gap-4"
-            >
-              <img
-                className="h-7 rounded-full"
-                src={session.user.image}
-                alt={session.user.name}
-                referrerPolicy="no-referrer"
-              />
-              <span>Guest area</span>
-            </Link>
-          ) : (
-            <Link
-              href="/account"
-              className="hover:text-accent-400 transition-colors"
-            >
-              Guest area
-            </Link>
-          )} */}
         </li>
       </ul>
     </nav>

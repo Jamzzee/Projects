@@ -1,7 +1,6 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Children } from 'react';
 
 export default function Filter({ paramKey, filters }) {
   const searchParams = useSearchParams();
@@ -17,7 +16,7 @@ export default function Filter({ paramKey, filters }) {
   }
 
   return (
-    <div className="border border-primary-800 flex">
+    <div className="flex border border-primary-800">
       {filters.map(({ label, value }) => (
         <Button
           key={value}
@@ -44,64 +43,3 @@ function Button({ filter, onHandleFilter, activeFilter, children }) {
     </button>
   );
 }
-
-// TODO Old version (needs refactoring)
-// export default function Filter() {
-//   const searchParams = useSearchParams();
-//   const router = useRouter();
-//   const pathname = usePathname();
-
-//   const activeFilter = searchParams.get('capacity') ?? 'all';
-
-//   function handleFitler(filter) {
-//     const params = new URLSearchParams(searchParams);
-//     params.set('capacity', filter);
-//     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-//   }
-
-//   return (
-//     <div className="border border-primary-800 flex">
-//       <Button
-//         filter="all"
-//         onHandleflter={handleFitler}
-//         activeFilter={activeFilter}
-//       >
-//         All cabins
-//       </Button>
-//       <Button
-//         filter="small"
-//         onHandleflter={handleFitler}
-//         activeFilter={activeFilter}
-//       >
-//         1&mdash;3 guests
-//       </Button>
-//       <Button
-//         filter="medium"
-//         onHandleflter={handleFitler}
-//         activeFilter={activeFilter}
-//       >
-//         4&mdash;7 guests
-//       </Button>
-//       <Button
-//         filter="large"
-//         onHandleflter={handleFitler}
-//         activeFilter={activeFilter}
-//       >
-//         8&mdash;12 guests
-//       </Button>
-//     </div>
-//   );
-// }
-
-// function Button({ filter, onHandleflter, activeFilter, children }) {
-//   return (
-//     <button
-//       onClick={() => onHandleflter(filter)}
-//       className={`px-5 py-2 hover:bg-primary-700 ${
-//         activeFilter === filter ? 'bg-primary-700 text-primary-50' : ''
-//       }`}
-//     >
-//       {children}
-//     </button>
-//   );
-// }

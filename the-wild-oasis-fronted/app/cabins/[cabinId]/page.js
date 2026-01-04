@@ -32,7 +32,7 @@ export async function generateMetadata({ params }) {
 
 export async function generateStaticParams() {
   const cabins = await getCabins();
-  const cabinId = cabins.map(cab => ({
+  const cabinId = cabins.map((cab) => ({
     cabinId: String(cab.id),
   }));
 
@@ -43,11 +43,11 @@ export default async function Page({ params }) {
   const cabin = await getCabin(params.cabinId);
 
   return (
-    <div className="max-w-6xl mx-auto mt-8">
+    <div className="mx-auto max-w-6xl sm:mt-4 md:mt-6 lg:mt-8">
       <Cabin cabin={cabin} />
 
-      <div>
-        <h2 className="text-5xl font-semibold text-center mb-8 text-accent-400">
+      <div className="text-center">
+        <h2 className="mb-6 text-3xl font-semibold text-accent-400 sm:mb-8 sm:text-4xl md:text-5xl">
           Reserve {cabin.name} today. Pay on arrival.
         </h2>
 

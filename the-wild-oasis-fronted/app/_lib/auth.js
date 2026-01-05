@@ -18,7 +18,10 @@ const authConfig = {
   providers: [Google],
   callbacks: {
     authorized({ auth, request }) {
-      return !!auth?.user;
+      // return !!auth?.user; //blocks unauthenticated access globally
+      return request.nextUrl.pathname.startsWith('/account')
+        ? !!auth?.user
+        : true;
     },
     async signIn({ user, account, profile }) {
       try {
@@ -36,6 +39,8 @@ const authConfig = {
       }
     },
     async session({ session, user }) {
+      if (!session?.user?.email) return session;
+
       const guest = await getGuest(session.user.email);
 
       session.user.guestId = guest.id;

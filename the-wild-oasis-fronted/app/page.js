@@ -5,7 +5,7 @@ import bg from '@/public/bg.png';
 export default function Page() {
   return (
     <main className="mt-24">
-      {/* <Image
+      <Image
         src={bg}
         fill
         priority
@@ -14,8 +14,8 @@ export default function Page() {
         placeholder="empty"
         className="object-cover object-top"
         alt="Mountains and forests with two cabins"
-      /> */}
-      <div className="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-top" aria-hidden />
+      />
+      {/* <div className="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-top" aria-hidden /> */}
 
       <div className="relative z-10 text-center">
         <h1 className="mb-6 text-4xl font-normal tracking-tight text-primary-50 sm:mb-8 sm:text-5xl md:mb-10 md:text-6xl lg:text-7xl xl:text-8xl">

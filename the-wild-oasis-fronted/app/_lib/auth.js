@@ -2,26 +2,12 @@ import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
 import { createGuest, getGuest } from './data-service';
 
-// Next auth v4
-// const authConfig = {
-//   providers: [
-//     Google({
-//       clientId: process.env.AUTH_GOOGLE_ID,
-//       clientSecret: process.env.AUTH_GOOGLE_SECRET,
-//     }),
-//   ],
-// };
-
-// Next auth v5
-
 const authConfig = {
   providers: [Google],
   callbacks: {
     authorized({ auth, request }) {
       // return !!auth?.user; //blocks unauthenticated access globally
-      return request.nextUrl.pathname.startsWith('/account')
-        ? !!auth?.user
-        : true;
+      return request.nextUrl.pathname.startsWith('/account') ? !!auth?.user : true;
     },
     async signIn({ user, account, profile }) {
       try {

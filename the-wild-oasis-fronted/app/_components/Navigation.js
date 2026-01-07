@@ -9,21 +9,13 @@ export default async function Navigation() {
     <nav className="z-10">
       <ul className="flex items-center gap-4 text-sm sm:gap-8 sm:text-base md:gap-12 md:text-xl">
         <li>
-          <Link
-            prefetch={false}
-            href="/cabins"
-            className="transition-colors hover:text-accent-400"
-          >
+          <Link href="/cabins" className="transition-colors hover:text-accent-400">
             Cabins
           </Link>
         </li>
 
         <li>
-          <Link
-            prefetch={false}
-            href="/about"
-            className="transition-colors hover:text-accent-400"
-          >
+          <Link href="/about" className="transition-colors hover:text-accent-400">
             About
           </Link>
         </li>
